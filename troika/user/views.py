@@ -23,8 +23,10 @@ def extra_login_user(user, remember=False, force=False):
 
 @blueprint.route("/login", methods=["GET", "POST"])
 def login():
-    form = LoginForm(request.form)
+    if current_user.is_authenticated():
+        return redirect(url_for('card.list'))
 
+    form = LoginForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
             extra_login_user(form.user)
