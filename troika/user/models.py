@@ -66,8 +66,8 @@ class User(UserMixin, SurrogatePK, Model):
     def create_user(self):
         user = User.query.filter_by(email=self.email).first()
         if user:
-            print("Email %(email)s already registered" % {'email': self.email})
-            return False
+            msg = "Email %(email)s already registered" % {'email': self.email}
+            raise ValueError(msg)
 
         self.save()
         return True
