@@ -6,10 +6,11 @@ from flask.ext.migrate import MigrateCommand
 from flask.ext.script import Manager, Server, Shell
 
 from troika.app import create_app
+from troika.card.command import AddCard
+from troika.card.models import Card
 from troika.database import db
 from troika.user.command import AddUser
 from troika.user.models import User
-from troika.card.models import Card
 
 try:
     from troika.settings_local import Config
@@ -32,6 +33,7 @@ manager.add_command('server', Server(host=app.config['APP_HOST'],
                                      port=app.config['APP_PORT']))
 manager.add_command('shell', Shell(make_context=_make_context))
 manager.add_command('add_user', AddUser)
+manager.add_command('add_card', AddCard)
 manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':

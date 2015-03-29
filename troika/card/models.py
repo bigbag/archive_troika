@@ -4,6 +4,8 @@ import datetime as dt
 from troika.database import (Column, Model, ReferenceCol, SurrogatePK, db,
                              relationship)
 
+from troika.helpers import date_helper
+
 
 class Card(SurrogatePK, Model):
 
@@ -38,8 +40,18 @@ class Card(SurrogatePK, Model):
     name_ru = db.Column(db.String(300))
     name_en = db.Column(db.String(300))
     creation_date = db.Column(db.DateTime, nullable=False)
-    troika_state = db.Column(db.Integer(), nullable=False, default=STATUS_NEW)
-    status = db.Column(db.String(128), nullable=False, default=STATE_ACTIVE)
+    troika_state = db.Column(db.Integer(), nullable=False, default=STATE_ACTIVE)
+    status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
+
+    def __init__(self, hard_id=None, troika_id=None, **kwargs):
+        if hard_id and troika_id:
+            self.hard_id = hard_id
+            self.troika_id = troika_id
+            self.creation_date = date_helper.get_current_date()
+            self.troika_state = self.STATE_ACTIVE
+            self.status = self.STATUS_NEW
+
+        db.Model.__init__(self, **kwargs)
 
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)
