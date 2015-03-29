@@ -23,7 +23,7 @@ def upgrade():
                     sa.Column('created_at', sa.DateTime(), nullable=False),
                     sa.Column('lastvisit', sa.DateTime(), nullable=True),
                     sa.Column('activkey', sa.String(length=128), nullable=False),
-                    sa.Column('status', sa.Integer(), nullable=True),
+                    sa.Column('status', sa.String(length=128), nullable=False, server_default='new'),
                     sa.Column('is_admin', sa.Boolean(), nullable=True),
                     sa.PrimaryKeyConstraint('id'),
                     sa.UniqueConstraint('email')

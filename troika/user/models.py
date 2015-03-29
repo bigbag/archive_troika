@@ -28,16 +28,16 @@ class User(UserMixin, SurrogatePK, Model):
 
     __tablename__ = 'users'
 
-    STATUS_NOACTIVE = 0
-    STATUS_ACTIVE = 1
-    STATUS_BANNED = -1
+    STATUS_NEW = 'new'
+    STATUS_ACTIVE = 'active'
+    STATUS_BANNED = 'banned'
 
     email = Column(db.String(80), unique=True, nullable=False)
     password = Column(db.String(128), nullable=True)
     created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
     lastvisit = Column(db.DateTime)
     activkey = db.Column(db.String(128), nullable=False)
-    status = db.Column(db.Integer, default=STATUS_NOACTIVE)
+    status = db.Column(db.String(128), default=STATUS_NEW, nullable=False)
     is_admin = Column(db.Boolean(), default=False)
 
     def __init__(self, email=None, password=None, **kwargs):
