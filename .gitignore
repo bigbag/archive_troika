@@ -3,6 +3,14 @@
 # C extensions
 *.so
 
+*.pyc
+app.db
+./tmp
+./.idea
+./.idea/*
+
+*.sublime*
+
 # Packages
 *.egg
 *.egg-info
@@ -45,6 +53,7 @@ docs/_build
 # Virtualenvs
 env
 env*
+venv
 
 
 # Logs
@@ -56,3 +65,7 @@ tmp/*
 
 # Settings
 *settings_local.py
+
+/troika/static/libs/*
+
+migrations/alembic.ini
