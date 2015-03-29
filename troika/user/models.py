@@ -43,12 +43,13 @@ class User(UserMixin, SurrogatePK, Model):
     is_admin = Column(db.Boolean(), default=False)
 
     def __init__(self, email=None, password=None, **kwargs):
-        db.Model.__init__(self, email=email, **kwargs)
         if password:
             self.set_password(password)
             self.set_activkey(password)
         else:
             self.password = None
+
+        db.Model.__init__(self, email=email, **kwargs)
 
     def set_password(self, password):
         self.password = bcrypt.generate_password_hash(password)
@@ -62,15 +63,6 @@ class User(UserMixin, SurrogatePK, Model):
     def update_lastvisit(self):
         self.lastvisit = dt.datetime.utcnow()
         self.save()
-
-    def create_user(self):
-        user = User.query.filter_by(email=self.email).first()
-        if user:
-            msg = "Email %(email)s already registered" % {'email': self.email}
-            raise ValueError(msg)
-
-        self.save()
-        return True
 
     def __repr__(self):
         return '<User({email!r})>'.format(email=self.email)
