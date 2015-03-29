@@ -1,0 +1,32 @@
+
+{% extends "layout.html" %}
+{% block body %}
+  <div class="container">
+    <div class="login-block">
+      <form id="loginForm" method="POST" action="{{ url_for('user.login') }}" role="login">
+      {{ form.hidden_tag() }}
+        <h2 class="form-signin-heading">Тройка</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          <div class="row">
+            <div class="col-md-12">
+              {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                <a class="close" title="Close" href="#" data-dismiss="alert">&times;</a>
+               {{ message }}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        {% endwith %}
+        {{ form.email(placeholder="Email", class_="form-control") }}
+        <br />
+        {{ form.password(placeholder="Password", class_="form-control") }}
+        <br />
+        <button class="btn btn-primary" type="submit">Sign in</button>
+    </form>
+    </div> 
+  </div> 
+{% endblock %}
+
