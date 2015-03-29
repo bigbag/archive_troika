@@ -94,7 +94,7 @@ class Config(object):
                 'datefmt': '%d/%b/%Y %H:%M:%S',
             },
             'simple': {
-                'format': '[%(levelname)s] [%(asctime)s] %(message)s',
+                'format': '[%(levelname)s] [P:%(process)d] [%(asctime)s] %(message)s',
                 'datefmt': '%d/%b/%Y %H:%M:%S',
             },
         }
