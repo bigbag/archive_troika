@@ -3,8 +3,8 @@ from flask.ext.script import Command, Option
 from troika.user.models import User
 
 
-class CreateUser(Command):
-    "Create new user"
+class AddUser(Command):
+    "Added new user"
 
     option_list = (
         Option('-e', '--email', dest='email', required=True),
