@@ -32,6 +32,8 @@ class User(UserMixin, SurrogatePK, Model):
     STATUS_ACTIVE = 'active'
     STATUS_BANNED = 'banned'
 
+    STATUS = (STATUS_NEW, STATUS_ACTIVE, STATUS_BANNED)
+
     email = Column(db.String(80), unique=True, nullable=False)
     password = Column(db.String(128), nullable=True)
     created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
