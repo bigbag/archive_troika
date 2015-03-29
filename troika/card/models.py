@@ -41,8 +41,21 @@ class Card(SurrogatePK, Model):
     troika_state = db.Column(db.Integer(), nullable=False, default=STATUS_NEW)
     status = db.Column(db.String(128), nullable=False, default=STATE_ACTIVE)
 
-    def __init__(self, **kwargs):
-        db.Model.__init__(self, **kwargs)
-
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)
+
+
+class CardsHistory(SurrogatePK, Model):
+
+    __tablename__ = 'cards_history'
+
+    card_id = ReferenceCol('cards', nullable=False)
+    card = relationship('Card', backref='cards_history')
+    user_id = ReferenceCol('users', nullable=False)
+    user = relationship('User', backref='cards_history')
+    before = db.Column(db.Text())
+    after = db.Column(db.Text())
+    action_date = db.Column(db.DateTime, nullable=False)
+
+    def __repr__(self):
+        return '<History ({card_id!r})>'.format(card_id=self.card_id)
