@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
+from flask_appbuilder.security.manager import AUTH_DB
 from troika.helpers.logging_helper import setup_loggers
 
 os_env = os.environ
@@ -43,9 +44,11 @@ class Config(object):
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True
 
+    AUTH_TYPE = AUTH_DB
+
     WTF_CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
 
-    TESTING = True
+    TESTING = False
 
     # DEBUG
     DEBUG = False
@@ -69,6 +72,14 @@ class Config(object):
 
     # TEMP
     TEMP_DIR = os.path.join(PROJECT_ROOT, 'tmp')
+
+    # BABEl
+    BABEL_DEFAULT_LOCALE = 'ru'
+    BABEL_DEFAULT_FOLDER = 'translations'
+    LANGUAGES = {
+        'en': {'flag': 'gb', 'name': 'English'},
+        'ru': {'flag': 'ru', 'name': 'Russian'}
+    }
 
     # LOGGING
     LOG_ENABLE = True
