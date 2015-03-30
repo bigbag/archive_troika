@@ -64,6 +64,7 @@ class CardsHistory(SurrogatePK, Model):
     card = relationship('Card', backref='cards_history')
     user_id = ReferenceCol('users', nullable=False)
     user = relationship('User', backref='cards_history')
+    action = db.Column(db.String(128), nullable=False)
     before = db.Column(db.Text())
     after = db.Column(db.Text())
     action_date = db.Column(db.DateTime, nullable=False)
