@@ -101,9 +101,7 @@ class Config(object):
     }
 
     # BUSINESS
-    ISSUERS = {
-        u'Mobispot': 111,
-    }
+    ISSUERS = 111
 
     FTP_HOST = ''
     FTP_USER = ''
