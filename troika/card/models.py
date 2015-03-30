@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 from troika.database import (Model, ReferenceCol, SurrogatePK, db, relationship)
 
 from troika.helpers import date_helper
@@ -52,6 +53,16 @@ class Card(SurrogatePK, Model):
 
         db.Model.__init__(self, **kwargs)
 
+    def to_json(self):
+        return json.dumps({
+            'id': self.id,
+            'hard_id': self.hard_id,
+            'troika_id': self.troika_id,
+            'name_ru': self.name_ru,
+            'troika_state': self.troika_state,
+            'status': self.status,
+        })
+
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)
 
@@ -59,6 +70,10 @@ class Card(SurrogatePK, Model):
 class CardsHistory(SurrogatePK, Model):
 
     __tablename__ = 'cards_history'
+
+    ACTION_CREATE = 'create'
+    ACTION_UPDATE = 'update'
+    ACTION_DELETE = 'delete'
 
     card_id = ReferenceCol('cards', nullable=False)
     card = relationship('Card', backref='cards_history')
@@ -68,6 +83,21 @@ class CardsHistory(SurrogatePK, Model):
     before = db.Column(db.Text())
     after = db.Column(db.Text())
     action_date = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, user_id=None, **kwargs):
+        if user_id:
+            self.user_id = user_id
+            self.action_date = date_helper.get_current_date()
+
+        db.Model.__init__(self, **kwargs)
+
+    def update_action(self, user_id, card_old, card_new):
+        history = CardsHistory(user_id)
+        history.action = self.ACTION_UPDATE
+        history.card_id = card_old.id
+        history.before = card_old.to_json()
+        history.after = card_new.to_json()
+        history.save()
 
     def __repr__(self):
         return '<History ({card_id!r})>'.format(card_id=self.card_id)

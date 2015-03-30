@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from flask import abort, Blueprint, flash, request, render_template
-from flask.ext.login import login_required
+from flask.ext.login import login_required, current_user
 
-from troika.card.models import Card
+from troika.card.models import Card, CardsHistory
 from troika.card.forms import CardForm
 from troika.utils import flash_errors
 
@@ -44,13 +44,15 @@ def edit(card_id):
     if not card:
         abort(404)
 
+    card_old = card
     form = CardForm(request.form)
     if request.method == 'POST':
         form.id.data = card.id
         if form.validate():
             form.populate_obj(card)
-            card.save()
-            flash(u'Данные успешно сохранены', "success")
+            if card.save():
+                CardsHistory().update_action(current_user.id, card_old, card)
+                flash(u'Данные успешно сохранены', "success")
         else:
             flash_errors(form)
 
