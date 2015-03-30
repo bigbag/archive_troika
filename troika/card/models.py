@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime as dt
-
-from troika.database import (Column, Model, ReferenceCol, SurrogatePK, db,
-                             relationship)
+from troika.database import (Model, ReferenceCol, SurrogatePK, db, relationship)
 
 from troika.helpers import date_helper
 
@@ -10,6 +7,8 @@ from troika.helpers import date_helper
 class Card(SurrogatePK, Model):
 
     __tablename__ = 'cards'
+
+    CARDS_PER_PAGE = 5
 
     STATUS_NEW = 'new'
     STATUS_INPROGRESS = 'inprogress'

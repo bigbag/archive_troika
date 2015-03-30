@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Тройка > Список карт{% endblock %}
+
+{% block content %}
+
+  {% block breadcrumb %}
+    <ol class="breadcrumb">
+      <li><a href="/">Главная</a></li>
+      <li class="active">Карты</li>
+    </ol>
+  {% endblock %}
+
+  <table class="table table-bordered table-responsive">
+      <thead>
+        <tr>
+          <th>Hard ID</th>
+          <th>Тройка ID</th>
+          <th>Статус в Тройке</th>
+          <th>Статус</th>
+          <th class="col-md-1">Операции</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for card in cards.items %}
+          <tr>
+            <td>
+              <a href="{{ url_for('card.show', card_id=card.id) }}">
+                {{ card.hard_id }}
+              </a>
+            </td>
+            <td>{{ card.troika_id }}</td>
+            <td>{{ troika_state_title[card.troika_state] }}</td>
+            <td>{{ status_title[card.status] }}</td>
+            <td>
+              <a href="{{ url_for('card.edit', card_id=card.id) }}" class="btn btn-primary btn-sm" title="Редактировать">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true">
+                </span>
+              </a>
+              <a href="#" class="btn btn-primary btn-sm" title="История">
+                <span class="glyphicon glyphicon-list-alt" aria-hidden="true">
+                </span>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% block pagination %}
+    <nav>
+      <ul class="pager">
+        {% if cards.has_prev %}
+        <li>
+          <a href="{{ url_for('card.list', page=cards.prev_num) }}">
+            Previous
+          </a>
+        </li>
+        {% endif %}
+        {% if cards.has_next %}
+        <li>
+          <a href="{{ url_for('card.list', page=cards.next_num) }}">
+            Next
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endblock %}
+{% endblock %}
