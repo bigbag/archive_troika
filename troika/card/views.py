@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import copy
+
 from flask import abort, Blueprint, flash, request, render_template
 from flask.ext.login import login_required, current_user
 
@@ -44,7 +46,7 @@ def edit(card_id):
     if not card:
         abort(404)
 
-    card_old = card
+    card_old = copy.deepcopy(card)
     form = CardForm(request.form)
     if request.method == 'POST':
         form.id.data = card.id
