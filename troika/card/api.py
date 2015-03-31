@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from flask import (Blueprint, current_app, jsonify, make_response)
+from flask import (Blueprint, current_app, jsonify, make_response, request)
 from flask.ext.httpauth import HTTPDigestAuth
 
 from troika.card.models import Card
@@ -29,7 +29,7 @@ def unauthorized():
 @blueprint.route("/", methods=['GET'])
 @auth.login_required
 @json_headers
-def get_activation():
+def get_all():
     cards = Card.query.limit(10).all()
     result = []
     for card in cards:
@@ -50,12 +50,42 @@ def get_new():
     return make_response(json.dumps(result), 200)
 
 
-@blueprint.route("/hard_id/<int:hard_id>", methods=['GET'])
+@blueprint.route("/hard_id/<hard_id>", methods=['GET'])
 @auth.login_required
 @json_headers
-def get_info_by_hard_id(hard_id):
+def get_by_hard_id(hard_id):
     card = Card.query.filter_by(hard_id=hard_id).first()
     if not card:
         return make_response(jsonify({'error': 'Not found'}), 404)
 
     return make_response(json.dumps(card.to_dict()), 200)
+
+
+@blueprint.route("/hard_id/<hard_id>", methods=['POST'])
+@auth.login_required
+@json_headers
+def update(hard_id):
+
+    troika_state = request.form.get('troika_state')
+    status = request.form.get('status')
+    if not troika_state and not status:
+        return make_response(jsonify({'error': 'Not found'}), 404)
+
+    if status and status not in Card.STATUS_TITLE:
+        return make_response(jsonify({'error': 'Bad request'}), 400)
+
+    if troika_state and int(troika_state) not in Card.TROIKA_STATE_TITLE:
+        return make_response(jsonify({'error': 'Bad request'}), 400)
+
+    card = Card.query.filter_by(hard_id=hard_id).first()
+    if not card:
+        return make_response(jsonify({'error': 'Not found'}), 404)
+
+    if troika_state:
+        card.troika_state = troika_state
+
+    if status:
+        card.status = status
+    card.save()
+
+    return make_response(json.dumps({}), 200)
