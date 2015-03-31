@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-from flask_appbuilder.security.manager import AUTH_DB
 from troika.helpers.logging_helper import setup_loggers
 
 os_env = os.environ
@@ -43,8 +42,6 @@ class Config(object):
     CSRF_SESSION_KEY = 'SOMETHING_IMPOSSIBLE_TO_GUEES'
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True
-
-    AUTH_TYPE = AUTH_DB
 
     WTF_CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
 
