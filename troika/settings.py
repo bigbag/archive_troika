@@ -47,6 +47,9 @@ class Config(object):
 
     TESTING = False
 
+    # API
+    API_USERS = {'mobispot': 'ce53dd4bcfa6a34a3827e4ee0af2f83b'}
+
     # DEBUG
     DEBUG = False
     ASSETS_DEBUG = False
