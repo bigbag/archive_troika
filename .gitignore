@@ -51,9 +51,8 @@ docs/_build
 .webassets-cache
 
 # Virtualenvs
-env
-env*
-venv
+env/
+venv/
 
 
 # Logs
