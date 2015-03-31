@@ -73,13 +73,18 @@ class Config(object):
     # TEMP
     TEMP_DIR = os.path.join(PROJECT_ROOT, 'tmp')
 
-    # BABEl
+    # BABEL
     BABEL_DEFAULT_LOCALE = 'ru'
     BABEL_DEFAULT_FOLDER = 'translations'
     LANGUAGES = {
         'en': {'flag': 'gb', 'name': 'English'},
         'ru': {'flag': 'ru', 'name': 'Russian'}
     }
+
+    # CELERY
+    USE_CELERY = True
+    CELERY_BROKER_URL = ''
+    CELERY_RESULT_BACKEND = ''
 
     # LOGGING
     LOG_ENABLE = True

@@ -68,3 +68,5 @@ tmp/*
 /troika/static/libs/*
 
 migrations/alembic.ini
+
+celerybeat-schedule

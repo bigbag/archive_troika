@@ -9,6 +9,7 @@ from flask.ext.login import LoginManager
 from flask.ext.migrate import Migrate
 from flask.ext.sqlalchemy import SQLAlchemy
 
+
 bcrypt = Bcrypt()
 
 login_manager = LoginManager()
