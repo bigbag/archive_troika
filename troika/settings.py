@@ -48,7 +48,7 @@ class Config(object):
     TESTING = False
 
     # API
-    API_USERS = {'mobispot': 'ce53dd4bcfa6a34a3827e4ee0af2f83b'}
+    API_USERS = {}
 
     # DEBUG
     DEBUG = False
