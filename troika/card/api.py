@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from flask import (Blueprint, abort, current_app, flash, jsonify,
-                   make_response, render_template, request)
+from flask import (Blueprint, current_app, jsonify, make_response)
 from flask.ext.httpauth import HTTPDigestAuth
 
 from troika.card.models import Card
@@ -49,3 +48,14 @@ def get_new():
         result.append(card.to_dict())
 
     return make_response(json.dumps(result), 200)
+
+
+@blueprint.route("/hard_id/<int:hard_id>", methods=['GET'])
+@auth.login_required
+@json_headers
+def get_info_by_hard_id(hard_id):
+    card = Card.query.filter_by(hard_id=hard_id).first()
+    if not card:
+        return make_response(jsonify({'error': 'Not found'}), 404)
+
+    return make_response(json.dumps(card.to_dict()), 200)
