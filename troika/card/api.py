@@ -30,8 +30,20 @@ def unauthorized():
 @blueprint.route("/", methods=['GET'])
 @auth.login_required
 @json_headers
-def list_activation():
+def get_activation():
     cards = Card.query.limit(10).all()
+    result = []
+    for card in cards:
+        result.append(card.to_dict())
+
+    return make_response(json.dumps(result), 200)
+
+
+@blueprint.route("/free", methods=['GET'])
+@auth.login_required
+@json_headers
+def get_new():
+    cards = Card.query.filter_by(status=Card.STATUS_NEW).limit(10).all()
     result = []
     for card in cards:
         result.append(card.to_dict())
