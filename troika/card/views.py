@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import copy
 
-from flask import abort, Blueprint, flash, request, render_template
-from flask.ext.login import login_required, current_user
+from flask import Blueprint, abort, flash, render_template, request
+from flask.ext.login import current_user, login_required
 
-from troika.card.models import Card, CardsHistory
 from troika.card.forms import CardForm
+from troika.card.models import Card, CardsHistory
 from troika.utils import flash_errors
 
 blueprint = Blueprint("card", __name__, url_prefix='/card',

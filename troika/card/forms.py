@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask_wtf import Form
-from wtforms import StringField, TextField, IntegerField
+from wtforms import IntegerField, StringField, TextField
 from wtforms.validators import DataRequired, Length
 
 from .models import Card

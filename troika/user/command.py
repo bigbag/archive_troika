@@ -1,4 +1,5 @@
 import logging
+
 from flask.ext.script import Command, Option
 
 from troika.user.models import User

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
-from troika.database import (Model, ReferenceCol, SurrogatePK, db, relationship)
 
+from troika.database import Model, ReferenceCol, SurrogatePK, db, relationship
 from troika.helpers import date_helper
 
 
@@ -53,15 +53,18 @@ class Card(SurrogatePK, Model):
 
         db.Model.__init__(self, **kwargs)
 
-    def to_json(self):
-        return json.dumps({
+    def to_dict(self):
+        return {
             'id': self.id,
             'hard_id': self.hard_id,
             'troika_id': self.troika_id,
             'name_ru': self.name_ru,
             'troika_state': self.troika_state,
             'status': self.status,
-        })
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
 
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)

@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for
 from flask.ext.login import (current_user, login_required, login_user,
                              logout_user)
 
-from troika.extensions import login_manager, cache
+from troika.extensions import cache, login_manager
 from troika.user.forms import LoginForm
 from troika.user.models import User
 from troika.utils import flash_errors

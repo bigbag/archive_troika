@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import gzip
 import StringIO
-
 from functools import wraps
+
 from flask import make_response
-from helpers import hash_helper
 
 
 def add_response_headers(headers={}):
@@ -42,16 +41,6 @@ def json_headers(f):
     @add_response_headers({'Content-Type': 'application/json'})
     def decorated_function(*args, **kwargs):
         return f(*args, **kwargs)
-    return decorated_function
-
-
-def md5_content_headers(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        resp = make_response(f(*args, **kwargs))
-        h = resp.headers
-        h['Content-MD5'] = hash_helper.get_content_md5(resp.response[0])
-        return resp
     return decorated_function
 
 
