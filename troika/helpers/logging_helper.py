@@ -21,7 +21,7 @@ def setup_loggers(logs_settings, logs_enabled, logs_level, logs_dir,
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        'file': {
+        'all_file': {
             'level': logs_level,
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'simple',
@@ -29,13 +29,27 @@ def setup_loggers(logs_settings, logs_enabled, logs_level, logs_dir,
             'maxBytes': logs_max_size,
             'backupCount': 20,
             'filename': "%s/all.log" % logs_dir
+        },
+        'celery_file': {
+            'level': logs_level,
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'simple',
+            'encoding': 'utf8',
+            'maxBytes': logs_max_size,
+            'backupCount': 20,
+            'filename': "%s/celery.log" % logs_dir
         }
     }
 
     logs_settings['loggers'] = {
         '': {
             'level': logs_level,
-            'handlers': ['console', 'file']
-        }
+            'handlers': ['console', 'all_file']
+        },
+        'celery.worker': {
+            'level': logs_level,
+            'handlers': ['celery_file']
+        },
+
     }
     logging.config.dictConfig(logs_settings)
