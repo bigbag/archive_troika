@@ -53,7 +53,7 @@ def edit(card_id):
         if form.validate():
             form.populate_obj(card)
             if card.save():
-                CardsHistory().update_action(current_user.id, card_old, card)
+                CardsHistory.update_action(current_user.id, card_old, card)
                 flash(u'Данные успешно сохранены', "success")
         else:
             flash_errors(form)
