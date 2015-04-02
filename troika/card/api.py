@@ -2,7 +2,7 @@
 import json
 
 from flask import (Blueprint, current_app, jsonify, make_response, request)
-from flask.ext.httpauth import HTTPDigestAuth
+from flask.ext.httpauth import HTTPBasicAuth
 
 from troika.card.models import Card
 from troika.helpers.header_helper import json_headers
@@ -10,7 +10,7 @@ from troika.helpers.header_helper import json_headers
 blueprint = Blueprint("card_api", __name__, url_prefix='/api/card',
                       static_folder="../static")
 
-auth = HTTPDigestAuth()
+auth = HTTPBasicAuth()
 
 
 @auth.get_password
