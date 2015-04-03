@@ -8,7 +8,7 @@ from flask.ext.login import current_user, login_required
 
 from troika.card.forms import CardForm
 from troika.card.models import Card, CardsHistory
-from troika.utils import flash_errors
+from troika.utils import flash_errors, format_error
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,7 @@ def edit(card_id):
         else:
             logger.debug('CARD EDIT')
             logger.debug('Request data: %(data)s' % {'data': request.form})
-            logger.debug('Form error: %(error)s' % {'error': form.errors})
+            logger.debug('Form error: %(error)s' % {'error': format_error(form)})
 
             flash_errors(form)
 

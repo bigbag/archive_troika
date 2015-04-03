@@ -8,7 +8,7 @@ from flask.ext.login import (current_user, login_required, login_user,
 from troika.extensions import cache, login_manager
 from troika.user.forms import LoginForm
 from troika.user.models import User
-from troika.utils import flash_errors
+from troika.utils import flash_errors, format_error
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def login():
         else:
             logger.debug('USER LOGIN')
             logger.debug('Request data: %(data)s' % {'data': request.form})
-            logger.debug('Form error: %(error)s' % {'error': form.errors})
+            logger.debug('Form error: %(error)s' % {'error': format_error(form)})
 
             flash_errors(form)
 
