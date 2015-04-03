@@ -46,7 +46,7 @@ def setup_loggers(logs_settings, logs_enabled, logs_level, logs_dir,
             'encoding': 'utf8',
             'maxBytes': logs_max_size,
             'backupCount': 20,
-            'filename': "%s/celery.log" % logs_dir
+            'filename': "%s/gunicorn.log" % logs_dir
         }
     }
 
