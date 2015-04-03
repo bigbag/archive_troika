@@ -8,4 +8,5 @@ def flash_errors(form, category="warning"):
     for field, errors in form.errors.items():
         for error in errors:
             label = getattr(form, field).label.text
-            flash("{0} - {1}".format(label, error), category)
+            msg = "%(label)s - %(error)s" % {'label': label, 'error': error}
+            flash(msg, category)
