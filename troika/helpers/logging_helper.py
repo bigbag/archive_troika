@@ -38,17 +38,34 @@ def setup_loggers(logs_settings, logs_enabled, logs_level, logs_dir,
             'maxBytes': logs_max_size,
             'backupCount': 20,
             'filename': "%s/celery.log" % logs_dir
+        },
+        'gunicorn_file': {
+            'level': logs_level,
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'simple',
+            'encoding': 'utf8',
+            'maxBytes': logs_max_size,
+            'backupCount': 20,
+            'filename': "%s/celery.log" % logs_dir
         }
     }
 
     logs_settings['loggers'] = {
-        '': {
+        'troika': {
             'level': logs_level,
             'handlers': ['console', 'all_file']
         },
         'celery.worker': {
             'level': logs_level,
             'handlers': ['celery_file']
+        },
+        'gunicorn.error': {
+            'level': logs_level,
+            'handlers': ['console', 'gunicorn_file']
+        },
+        'gunicorn.access': {
+            'level': logs_level,
+            'handlers': ['console', 'gunicorn_file']
         },
 
     }
