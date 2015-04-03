@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+import logging
+
 from flask import Blueprint, redirect, render_template, request, url_for
 from flask.ext.login import (current_user, login_required, login_user,
                              logout_user)
@@ -6,6 +9,8 @@ from troika.extensions import cache, login_manager
 from troika.user.forms import LoginForm
 from troika.user.models import User
 from troika.utils import flash_errors
+
+logger = logging.getLogger(__name__)
 
 blueprint = Blueprint('user', __name__, url_prefix='/user',
                       static_folder="../static")
@@ -34,6 +39,10 @@ def login():
             redirect_url = request.args.get("next") or url_for('public.index')
             return redirect(redirect_url)
         else:
+            logger.debug('USER LOGIN')
+            logger.debug('Request data: %(data)s' % {'data': request.form})
+            logger.debug('Form error: %(error)s' % {'error': form.errors})
+
             flash_errors(form)
 
     return render_template("user/login.html", form=form)

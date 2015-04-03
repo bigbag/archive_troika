@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
+import logging
+
 
 from flask import Blueprint, abort, flash, render_template, request
 from flask.ext.login import current_user, login_required
@@ -7,6 +9,8 @@ from flask.ext.login import current_user, login_required
 from troika.card.forms import CardForm
 from troika.card.models import Card, CardsHistory
 from troika.utils import flash_errors
+
+logger = logging.getLogger(__name__)
 
 blueprint = Blueprint("card", __name__, url_prefix='/card',
                       static_folder="../static")
@@ -56,6 +60,10 @@ def edit(card_id):
                 CardsHistory.update_action(current_user.id, card_old, card)
                 flash(u'Данные успешно сохранены', "success")
         else:
+            logger.debug('CARD EDIT')
+            logger.debug('Request data: %(data)s' % {'data': request.form})
+            logger.debug('Form error: %(error)s' % {'error': form.errors})
+
             flash_errors(form)
 
     return render_template("card/edit.html",

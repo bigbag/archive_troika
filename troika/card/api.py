@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import logging
 
 from flask import (Blueprint, current_app, jsonify, make_response, request)
 from flask.ext.httpauth import HTTPBasicAuth
@@ -7,10 +8,12 @@ from flask.ext.httpauth import HTTPBasicAuth
 from troika.card.models import Card
 from troika.helpers.header_helper import json_headers
 
+auth = HTTPBasicAuth()
+
+logger = logging.getLogger(__name__)
+
 blueprint = Blueprint("card_api", __name__, url_prefix='/api/card',
                       static_folder="../static")
-
-auth = HTTPBasicAuth()
 
 
 @auth.get_password
@@ -65,6 +68,8 @@ def get_by_hard_id(hard_id):
 @auth.login_required
 @json_headers
 def update(hard_id):
+    logger.debug('API CARD UPDATE')
+    logger.debug('Request data: %(data)s' % {'data': request.form})
 
     troika_state = request.form.get('troika_state')
     status = request.form.get('status')
