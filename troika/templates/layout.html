@@ -31,6 +31,20 @@
   <div class="{% block content_class %}container{% endblock content_class %}">
 
     <div role="main">
+      {% block menu %}
+      <div class="row">
+        <div class="col-md-11">
+          {% block breadcrumb %}{% endblock %}
+        </div>
+        <div class="col-md-1 text-right">
+          <a href="#" class="btn btn-primary btn-sm" title="Импорт">
+            <span class="glyphicon glyphicon glyphicon-import" aria-hidden="true">
+            </span>
+          </a>
+        </div>
+      </div>
+      {% endblock %}
+      
       {% block content %}{% endblock %}
     </div>
 

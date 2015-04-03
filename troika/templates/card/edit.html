@@ -2,15 +2,15 @@
 
 {% block page_title %}Тройка > Карты > Редактирование ({{ card.hard_id }}){% endblock %}
 
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="/">Главная</a></li>
+    <li><a href="/card/">Карты</a></li>
+    <li class="active">Редактирование ({{ card.hard_id }})</li>
+  </ol>
+{% endblock %}
+  
 {% block content %}
-
-  {% block breadcrumb %}
-    <ol class="breadcrumb">
-      <li><a href="/">Главная</a></li>
-      <li><a href="/card/">Карты</a></li>
-      <li class="active">Редактирование ({{ card.hard_id }})</li>
-    </ol>
-  {% endblock %}
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div class="row">

@@ -2,15 +2,15 @@
 
 {% block page_title %}Тройка > Карт > Просмотр ({{ card.hard_id }}){% endblock %}
 
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="/">Главная</a></li>
+    <li><a href="/card/">Карты</a></li>
+    <li class="active">Просмотр ({{ card.hard_id }})</li>
+  </ol>
+{% endblock %}
+  
 {% block content %}
-
-  {% block breadcrumb %}
-    <ol class="breadcrumb">
-      <li><a href="/">Главная</a></li>
-      <li><a href="/card/">Карты</a></li>
-      <li class="active">Просмотр ({{ card.hard_id }})</li>
-    </ol>
-  {% endblock %}
 
     <form class="form-horizontal">
     <div class="form-group">
