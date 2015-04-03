@@ -9,12 +9,18 @@ from .models import Card
 class CardForm(Form):
 
     id = IntegerField()
-    hard_id = StringField('Hard ID', validators=[DataRequired(), Length(min=3, max=128)])
-    troika_id = StringField('Troika ID', validators=[DataRequired(), Length(min=3, max=128)])
-    name_ru = TextField('Russian name', validators=[Length(min=0, max=300)])
-    name_en = TextField('English name', validators=[Length(min=0, max=300)])
-    troika_state = IntegerField('Troika state')
-    status = StringField('Status')
+    hard_id = StringField(
+        'Hard ID',
+        validators=[DataRequired(message=u'Поле обязательно для заполнения'),
+                    Length(min=3, max=128)])
+    troika_id = StringField(
+        'Troika ID',
+        validators=[DataRequired(message=u'Поле обязательно для заполнения'),
+                    Length(min=3, max=128)])
+    name_ru = TextField(u'Название на русском', validators=[Length(min=0, max=300)])
+    name_en = TextField(u'Название на англиском', validators=[Length(min=0, max=300)])
+    troika_state = IntegerField(u'Статус в Тройке')
+    status = StringField(u'Статус')
 
     def __init__(self, *args, **kwargs):
         super(CardForm, self).__init__(*args, **kwargs)
@@ -29,13 +35,11 @@ class CardForm(Form):
         except:
             self.id.data = 0
 
-        card = Card.query.filter_by(hard_id=self.hard_id.data).first()
+        card = Card.query.filter(
+            (Card.hard_id == self.hard_id.data) |
+            (Card.troika_id == self.troika_id.data)).first()
         if card.id != self.id.data:
-            self.hard_id.errors.append("Card with the hard_id has already been added")
-            return False
-
-        card = Card.query.filter_by(troika_id=self.troika_id.data).first()
-        if card.id != self.id.data:
-            self.troika_id.errors.append("Card with the troika_id has already been added")
+            self.hard_id.errors.append(u"Карта с таким набором параметров уже есть в базе")
+            self.troika_id.errors.append(u"Карта с таким набором параметров уже есть в базе")
             return False
         return True
