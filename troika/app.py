@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from celery import Celery
 from flask import Flask, render_template
 
-from celery import Celery
 from troika import card, public, user
 from troika.assets import assets
 from troika.extensions import (bcrypt, cache, db, debug_toolbar, login_manager,
@@ -24,11 +24,10 @@ def create_app(config_object=Config):
     '''
     app = Flask(__name__)
     app.config.from_object(config_object)
-    celery = make_celery(app)
     register_extensions(app)
     register_blueprints(app)
     register_errorhandlers(app)
-    return app, celery
+    return app
 
 
 def register_extensions(app):

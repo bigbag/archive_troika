@@ -18,7 +18,7 @@ except Exception as e:
     logging.exception("Exception: %(body)s", {'body': e})
     from troika.settings import Config
 
-app, celery = create_app(Config)
+app = create_app(Config)
 manager = Manager(app)
 
 
