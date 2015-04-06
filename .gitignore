@@ -73,3 +73,5 @@ celerybeat-schedule
 
 troika/static/css/common.css
 troika/static/js/common.js
+
+upload/*
