@@ -45,6 +45,11 @@ class Config(object):
 
     WTF_CSRF_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE']
 
+    # FORM
+    IMPORT_FILE_EXTENSIONS = set(['csv', 'text', 'txt'])
+    UPLOAD_FOLDER = os.path.join(PROJECT_ROOT, 'upload')
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+
     TESTING = False
 
     # API

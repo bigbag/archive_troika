@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import copy
+import csv
 import logging
 
-
-from flask import Blueprint, abort, flash, render_template, request
+from flask import (Blueprint, abort, current_app, flash,
+                   render_template, request)
 from flask.ext.login import current_user, login_required
 
 from troika.card.forms import CardForm
@@ -71,3 +72,44 @@ def edit(card_id):
                            form=form,
                            status_title=Card.STATUS_TITLE,
                            troika_state_title=Card.TROIKA_STATE_TITLE)
+
+
+def allowed_file(filename):
+
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in current_app.config.get('IMPORT_FILE_EXTENSIONS')
+
+
+def parsing_csv(file):
+    csvfile = file.stream.read()
+    try:
+        dialect = csv.Sniffer().sniff(csvfile)
+    except:
+        flash(u'Загруженный файл имеет неверный формат.', 'danger')
+        return
+
+    cards = []
+    reader = csv.reader(csvfile.split('\n'), dialect)
+    for row in reader:
+        card = Card(row[0], row[1])
+        old_card = Card.query.filter(
+            (Card.hard_id == card.hard_id) |
+            (Card.troika_id == card.troika_id)).first()
+        if old_card:
+            return
+        cards.append(row)
+
+    return cards
+
+
+@blueprint.route("/import", methods=['GET', 'POST'])
+@login_required
+def import_cards():
+
+    cards = []
+    if request.method == 'POST':
+        file = request.files['importFile']
+        if file and allowed_file(file.filename):
+            cards = parsing_csv(file)
+
+    return render_template("card/import.html", cards=cards)
