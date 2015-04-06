@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from celery import Celery
 from flask import Flask, render_template
 
+from celery import Celery
 from troika import card, public, user
 from troika.assets import assets
-from troika.extensions import (bcrypt, cache, db, debug_toolbar, login_manager, migrate)
+from troika.extensions import (bcrypt, cache, db, debug_toolbar, login_manager,
+                               migrate)
 
 try:
     from troika.settings_local import Config
