@@ -40,4 +40,4 @@ class AddCard(Command):
             logging.exception("Exception: %(body)s", {'body': e})
             return
         else:
-            print card.id
+            return card.id
