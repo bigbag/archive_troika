@@ -54,29 +54,4 @@
       </form>
     </div>
   </div>
-
-  <br />
-  {% if cards %}
-    <p><strong>Вы загрузили информацию о следующих картах:</strong></p>
-    <table class="table table-bordered table-responsive">
-      <thead>
-        <tr>
-          <th class="col-md-2">Hard ID</th>
-          <th class="col-md-2">Тройка ID</th>
-          <th>Название на русском</th>
-          <th>Название на англиском</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for card in cards %}
-          <tr>
-            <td>{{ card[0] }}</td>
-            <td>{{ card[1] }}</td>
-            <td>{{ card[2] }}</td>
-            <td>{{ card[3] }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  {% endif %}
 {% endblock %}
