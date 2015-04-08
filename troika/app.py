@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging
+from importlib import import_module
 
-from celery import Celery
 from flask import Flask, render_template
 
 from troika import card, public, user
 from troika.assets import assets
-from troika.extensions import (bcrypt, cache, db, debug_toolbar, login_manager,
-                               migrate)
+from troika.extensions import (bcrypt, cache, celery, db, debug_toolbar,
+                               login_manager, migrate)
 
 try:
     from troika.settings_local import Config
@@ -17,11 +17,7 @@ except Exception as e:
 
 
 def create_app(config_object=Config):
-    '''An application factory, as explained here:
-        http://flask.pocoo.org/docs/patterns/appfactories/
 
-    :param config_object: The configuration object to use.
-    '''
     app = Flask(__name__)
     app.config.from_object(config_object)
     register_extensions(app)
@@ -31,6 +27,7 @@ def create_app(config_object=Config):
 
 
 def register_extensions(app):
+
     assets.init_app(app)
     bcrypt.init_app(app)
     cache.init_app(app)
@@ -38,10 +35,12 @@ def register_extensions(app):
     login_manager.init_app(app)
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
+    celery.init_app(app)
     return None
 
 
 def register_blueprints(app):
+
     app.register_blueprint(card.views.blueprint)
     app.register_blueprint(card.api.blueprint)
 
@@ -58,18 +57,3 @@ def register_errorhandlers(app):
     for errcode in [401, 404, 405, 500]:
         app.errorhandler(errcode)(render_error)
     return None
-
-
-def make_celery(app):
-    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
-    celery.conf.update(app.config)
-    TaskBase = celery.Task
-
-    class ContextTask(TaskBase):
-        abstract = True
-
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                return TaskBase.__call__(self, *args, **kwargs)
-    celery.Task = ContextTask
-    return celery
