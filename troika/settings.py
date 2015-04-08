@@ -90,6 +90,18 @@ class Config(object):
     USE_CELERY = True
     CELERY_BROKER_URL = ''
     CELERY_RESULT_BACKEND = ''
+    CELERY_IMPORTS = ('troika.card.tasks', )
+
+    CELERYD_PREFETCH_MULTIPLIER = 1
+    CELERYD_TASK_SOFT_TIME_LIMIT = 20 * 60  # Raise exception if task takes too long.
+    CELERYD_TASK_TIME_LIMIT = 30 * 60  # Kill worker if task takes way too long.
+    CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_ACKS_LATE = True
+    CELERY_DISABLE_RATE_LIMITS = True
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_TASK_RESULT_EXPIRES = 10 * 60  # Dispose of Celery Beat results after 10 minutes.
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_TRACK_STARTED = True
 
     # LOGGING
     LOG_ENABLE = True
