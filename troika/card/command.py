@@ -2,6 +2,7 @@ import logging
 
 from flask.ext.script import Command, Option
 
+from troika.card import tasks
 from troika.card.models import Card
 
 
@@ -40,4 +41,6 @@ class AddCard(Command):
             logging.exception("Exception: %(body)s", {'body': e})
             return
         else:
+            tasks.create_action.delay(0, card.id, card.to_json())
+
             return card.id
