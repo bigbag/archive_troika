@@ -94,19 +94,5 @@ class CardsHistory(SurrogatePK, Model):
 
         db.Model.__init__(self, **kwargs)
 
-    @staticmethod
-    def update_action(user_id, card_old, card_new):
-        before = card_old.to_json()
-        after = card_new.to_json()
-        if before == after:
-            return
-
-        history = CardsHistory(user_id)
-        history.action = CardsHistory.ACTION_UPDATE
-        history.card_id = card_old.id
-        history.before = before
-        history.after = after
-        history.save()
-
     def __repr__(self):
         return '<History ({card_id!r})>'.format(card_id=self.card_id)

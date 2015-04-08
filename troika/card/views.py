@@ -3,12 +3,13 @@ import copy
 import csv
 import logging
 
-from flask import (Blueprint, abort, current_app, flash,
-                   render_template, request)
+from flask import (Blueprint, abort, current_app, flash, render_template,
+                   request)
 from flask.ext.login import current_user, login_required
 
+from troika.card import tasks
 from troika.card.forms import CardForm
-from troika.card.models import Card, CardsHistory
+from troika.card.models import Card
 from troika.utils import flash_errors, format_error
 
 logger = logging.getLogger(__name__)
@@ -46,7 +47,6 @@ def show(card_id):
 @blueprint.route("/edit/<int:card_id>", methods=['GET', 'POST'])
 @login_required
 def edit(card_id):
-
     card = Card.query.get(card_id)
     if not card:
         abort(404)
@@ -58,7 +58,8 @@ def edit(card_id):
         if form.validate():
             form.populate_obj(card)
             if card.save():
-                CardsHistory.update_action(current_user.id, card_old, card)
+                tasks.update_action.delay(
+                    current_user.id, card.id, card_old.to_json(), card.to_json())
                 flash(u'Данные успешно сохранены', "success")
         else:
             logger.debug('CARD EDIT')
@@ -96,7 +97,7 @@ def parsing_csv(file):
             (Card.hard_id == card.hard_id) |
             (Card.troika_id == card.troika_id)).first()
         if old_card:
-            return
+            continue
         cards.append(row)
 
     return cards
@@ -106,10 +107,20 @@ def parsing_csv(file):
 @login_required
 def import_cards():
 
-    cards = []
     if request.method == 'POST':
         file = request.files['importFile']
         if file and allowed_file(file.filename):
             cards = parsing_csv(file)
+            if not cards:
+                flash(u'Загруженный файл не содержит новых карт.', 'danger')
+            else:
+                for row in cards:
+                    card = Card(row[0], row[1])
+                    card.save()
 
-    return render_template("card/import.html", cards=cards)
+                    tasks.create_action.delay(
+                        current_user.id, card.id, card.to_json())
+
+                flash(u'Данные успешно загружены', 'success')
+
+    return render_template("card/import.html")
