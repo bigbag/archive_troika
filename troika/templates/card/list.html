@@ -17,7 +17,7 @@
           <th>Тройка ID</th>
           <th>Статус в Тройке</th>
           <th>Статус</th>
-          <th class="col-md-1">Операции</th>
+          <th class="col-md-1"></th>
         </tr>
       </thead>
       <tbody>
@@ -36,7 +36,8 @@
                 <span class="glyphicon glyphicon-edit" aria-hidden="true">
                 </span>
               </a>
-              <a href="#" class="btn btn-primary btn-sm" title="История">
+              <a href="{{ url_for('history.list') }}?card_id={{ card.id }}" 
+                class="btn btn-primary btn-sm" title="История">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true">
                 </span>
               </a>
@@ -51,14 +52,14 @@
       <ul class="pager">
         {% if cards.has_prev %}
         <li>
-          <a href="{{ url_for('card.list') }}?page={{cards.prev_num}}">
+          <a href="{{ url_for('card.list') }}?page={{ cards.prev_num }}">
             Previous
           </a>
         </li>
         {% endif %}
         {% if cards.has_next %}
         <li>
-          <a href="{{ url_for('card.list') }}?page={{cards.next_num}}">
+          <a href="{{ url_for('card.list') }}?page={{ cards.next_num }}">
             Next
           </a>
         </li>

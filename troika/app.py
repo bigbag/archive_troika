@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
-from importlib import import_module
 
 from flask import Flask, render_template
 
-from troika import card, public, user
+from troika import card, public, user, history
 from troika.assets import assets
 from troika.extensions import (bcrypt, cache, celery, db, debug_toolbar,
                                login_manager, migrate)
@@ -44,6 +43,7 @@ def register_blueprints(app):
     app.register_blueprint(card.views.blueprint)
     app.register_blueprint(card.api.blueprint)
 
+    app.register_blueprint(history.views.blueprint)
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(user.views.blueprint)
     return None

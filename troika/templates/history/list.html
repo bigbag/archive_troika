@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Тройка > Список карт{% endblock %}
+
+{% block breadcrumb %}
+  {% if not card_id %}
+    <ol class="breadcrumb">
+      <li><a href="/">Главная</a></li>
+      <li class="active">История</li>
+    </ol>
+  {% else %}
+    <ol class="breadcrumb">
+      <li><a href="/">Главная</a></li>
+      <li><a href="{{ url_for('history.list') }}">История</a></li>
+      <li class="active">Карта ({{ card_id }})</li>
+    </ol>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <table class="table table-bordered table-responsive">
+      <thead>
+        <tr>
+          {% if not card_id %}<th>Карта</th>{% endif %}
+          <th>Пользователь</th>
+          <th>Действие</th>
+          <th>Дата</th>
+          <th class="col-md-1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in history.items %}
+          <tr>
+            {% if not card_id %}
+              <td>
+                <a href="{{ url_for('history.list') }}?card_id={{ row.card_id }}">
+                  {{ row.card_id }}
+                </a>
+              </td>
+            {% endif %}
+            <td>{{ row.user.email }}</td>
+            <td class="col-md-2">{{ action_title[row.action] }}</td>
+            <td class="col-md-2">{{ row.action_date }}</td>
+            <td></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  {% block pagination %}
+    <nav>
+      <ul class="pager">
+        {% if not card_id %}
+          {% if history.has_prev %}
+            <li>
+              <a href="{{ url_for('history.list') }}?page={{ history.prev_num }}">
+                Previous
+              </a>
+            </li>
+            {% endif %}
+            {% if history.has_next %}
+            <li>
+              <a href="{{ url_for('history.list') }}?page={{ history.next_num }}">
+                Next
+              </a>
+            </li>
+          {% endif %}
+        {% else %}
+          {% if history.has_prev %}
+            <li>
+              <a href="{{ url_for('history.list') }}?page={{ history.prev_num }}&card_id={{ card_id }}">
+                Previous
+              </a>
+            </li>
+            {% endif %}
+            {% if history.has_next %}
+            <li>
+              <a href="{{ url_for('history.list') }}?page={{ history.next_num }}&card_id={{ card_id }}">
+                Next
+              </a>
+            </li>
+          {% endif %}
+        {% endif %}
+        
+      </ul>
+    </nav>
+  {% endblock %}
+{% endblock %}
