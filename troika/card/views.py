@@ -19,9 +19,12 @@ blueprint = Blueprint("card", __name__, url_prefix='/card',
 
 
 @blueprint.route("/", methods=['GET'])
-@blueprint.route("/<int:page>", methods=['GET'])
 @login_required
-def list(page=1):
+def list():
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        abort(404)
 
     cards = Card.query.paginate(page, Card.CARDS_PER_PAGE, False)
     return render_template("card/list.html",
@@ -30,7 +33,7 @@ def list(page=1):
                            troika_state_title=Card.TROIKA_STATE_TITLE)
 
 
-@blueprint.route("/show/<int:card_id>", methods=['GET'])
+@blueprint.route("/<int:card_id>", methods=['GET'])
 @login_required
 def show(card_id):
 

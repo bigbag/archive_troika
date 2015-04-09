@@ -51,14 +51,14 @@
       <ul class="pager">
         {% if cards.has_prev %}
         <li>
-          <a href="{{ url_for('card.list', page=cards.prev_num) }}">
+          <a href="{{ url_for('card.list') }}?page={{cards.prev_num}}">
             Previous
           </a>
         </li>
         {% endif %}
         {% if cards.has_next %}
         <li>
-          <a href="{{ url_for('card.list', page=cards.next_num) }}">
+          <a href="{{ url_for('card.list') }}?page={{cards.next_num}}">
             Next
           </a>
         </li>
