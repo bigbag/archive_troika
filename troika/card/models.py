@@ -9,7 +9,7 @@ class Card(SurrogatePK, Model):
 
     __tablename__ = 'cards'
 
-    CARDS_PER_PAGE = 50
+    PER_PAGE = 50
 
     STATUS_NEW = 'new'
     STATUS_INPROGRESS = 'inprogress'

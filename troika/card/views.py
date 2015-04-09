@@ -21,12 +21,13 @@ blueprint = Blueprint("card", __name__, url_prefix='/card',
 @blueprint.route("/", methods=['GET'])
 @login_required
 def list():
+
     try:
         page = int(request.args.get('page', 1))
     except ValueError:
         abort(404)
 
-    cards = Card.query.paginate(page, Card.CARDS_PER_PAGE, False)
+    cards = Card.query.paginate(page, Card.PER_PAGE, False)
     return render_template("card/list.html",
                            cards=cards,
                            status_title=Card.STATUS_TITLE,
@@ -85,6 +86,7 @@ def allowed_file(filename):
 
 
 def parsing_csv(file):
+
     csvfile = file.stream.read()
     try:
         dialect = csv.Sniffer().sniff(csvfile)
