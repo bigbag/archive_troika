@@ -4,6 +4,14 @@
       <a class="navbar-brand" href="{{ url_for('public.index') }}">Тройка</a>
     </div>
     <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav navbar-left">
+        <li>
+          <a class="navbar-link" href="{{ url_for('card.list') }}">Карты</a>
+        </li>
+        <li>
+          <a class="navbar-link" href="{{ url_for('history.list') }}">История</a>
+        </li>
+      </ul>
       <ul class="nav navbar-nav navbar-right">
           <li>
             <a class="navbar-link" href="{{ url_for('user.logout') }}">Выйти <i class="fa fa-sign-out"></i>
