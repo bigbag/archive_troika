@@ -74,9 +74,15 @@ class CardsHistory(SurrogatePK, Model):
 
     __tablename__ = 'cards_history'
 
+    PER_PAGE = 50
+
     ACTION_CREATE = 'create'
     ACTION_UPDATE = 'update'
     ACTION_DELETE = 'delete'
+
+    ACTION_TITLE = {ACTION_CREATE: u'Добавление',
+                    ACTION_UPDATE: u'Изменение',
+                    ACTION_DELETE: u'Удаление'}
 
     card_id = ReferenceCol('cards', nullable=False)
     card = relationship('Card', backref='cards_history')
