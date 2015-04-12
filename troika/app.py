@@ -3,7 +3,7 @@ import logging
 
 from flask import Flask, render_template
 
-from troika import card, public, user, history
+from troika import card, history, public, user
 from troika.assets import assets
 from troika.extensions import (bcrypt, cache, celery, db, debug_toolbar,
                                login_manager, migrate)

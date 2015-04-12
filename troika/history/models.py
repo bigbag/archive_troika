@@ -2,9 +2,10 @@
 import json
 
 from flask import render_template
+
+from troika.card.models import Card
 from troika.database import Model, ReferenceCol, SurrogatePK, db, relationship
 from troika.helpers import date_helper
-from troika.card.models import Card
 
 
 class CardsHistory(SurrogatePK, Model):

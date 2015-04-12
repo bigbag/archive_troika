@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from troika.history.models import CardsHistory
 from troika.extensions import celery
+from troika.history.models import CardsHistory
 
 
 @celery.task()

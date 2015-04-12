@@ -7,9 +7,9 @@ from flask import (Blueprint, abort, current_app, flash, render_template,
                    request)
 from flask.ext.login import current_user, login_required
 
-from troika.history import tasks
 from troika.card.forms import CardForm
 from troika.card.models import Card
+from troika.history import tasks
 from troika.utils import flash_errors, format_error
 
 logger = logging.getLogger(__name__)

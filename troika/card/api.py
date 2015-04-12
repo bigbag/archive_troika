@@ -6,9 +6,9 @@ import logging
 from flask import Blueprint, current_app, jsonify, make_response, request
 from flask.ext.httpauth import HTTPBasicAuth
 
-from troika.history import tasks
 from troika.card.models import Card
 from troika.helpers.header_helper import json_headers
+from troika.history import tasks
 
 auth = HTTPBasicAuth()
 

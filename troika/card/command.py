@@ -2,8 +2,8 @@ import logging
 
 from flask.ext.script import Command, Option
 
-from troika.history import tasks
 from troika.card.models import Card
+from troika.history import tasks
 
 
 class AddCard(Command):
