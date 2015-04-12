@@ -4,6 +4,7 @@ import logging
 from flask import Blueprint, abort, render_template, request
 from flask.ext.login import login_required
 
+from troika.card.models import Card
 from troika.history.models import CardsHistory
 
 logger = logging.getLogger(__name__)
@@ -22,11 +23,17 @@ def list():
     except ValueError:
         abort(404)
 
+    card = None
     query = CardsHistory.query.order_by('action_date desc')
     if card_id:
+        card = Card.query.get(card_id)
+        if not card:
+            abort(404)
+
         query = query.filter_by(card_id=card_id)
     history = query.paginate(page, CardsHistory.PER_PAGE, False)
     return render_template("history/list.html",
+                           card=card,
                            history=history,
                            action_title=CardsHistory.ACTION_TITLE,
                            card_id=card_id)
