@@ -90,7 +90,7 @@ class Config(object):
     USE_CELERY = True
     CELERY_BROKER_URL = ''
     CELERY_RESULT_BACKEND = ''
-    CELERY_IMPORTS = ('troika.card.tasks', )
+    CELERY_IMPORTS = ('troika.history.tasks', )
 
     CELERYD_PREFETCH_MULTIPLIER = 1
     CELERYD_TASK_SOFT_TIME_LIMIT = 20 * 60  # Raise exception if task takes too long.

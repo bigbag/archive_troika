@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from troika.database import Model, ReferenceCol, SurrogatePK, db, relationship
+from troika.database import Model, SurrogatePK, db
 from troika.helpers import date_helper
 
 
@@ -68,37 +68,3 @@ class Card(SurrogatePK, Model):
 
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)
-
-
-class CardsHistory(SurrogatePK, Model):
-
-    __tablename__ = 'cards_history'
-
-    PER_PAGE = 50
-
-    ACTION_CREATE = 'create'
-    ACTION_UPDATE = 'update'
-    ACTION_DELETE = 'delete'
-
-    ACTION_TITLE = {ACTION_CREATE: u'Добавление',
-                    ACTION_UPDATE: u'Изменение',
-                    ACTION_DELETE: u'Удаление'}
-
-    card_id = ReferenceCol('cards', nullable=False)
-    card = relationship('Card', backref='cards_history')
-    user_id = ReferenceCol('users', nullable=False)
-    user = relationship('User', backref='cards_history')
-    action = db.Column(db.String(128), nullable=False)
-    before = db.Column(db.Text())
-    after = db.Column(db.Text())
-    action_date = db.Column(db.DateTime, nullable=False)
-
-    def __init__(self, user_id=None, **kwargs):
-        if user_id:
-            self.user_id = user_id
-            self.action_date = date_helper.get_current_date()
-
-        db.Model.__init__(self, **kwargs)
-
-    def __repr__(self):
-        return '<History ({card_id!r})>'.format(card_id=self.card_id)

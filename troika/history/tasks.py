@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from troika.card.models import CardsHistory
+from troika.history.models import CardsHistory
 from troika.extensions import celery
 
 

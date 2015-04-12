@@ -4,7 +4,7 @@ import logging
 from flask import Blueprint, abort, render_template, request
 from flask.ext.login import login_required
 
-from troika.card.models import CardsHistory
+from troika.history.models import CardsHistory
 
 logger = logging.getLogger(__name__)
 
