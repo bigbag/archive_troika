@@ -1,17 +1,17 @@
 {% extends "layout.html" %}
 
-{% block page_title %}Тройка > Список карт{% endblock %}
+{% block page_title %}Тройка > История карт{% endblock %}
 
 {% block breadcrumb %}
   {% if not card_id %}
     <ol class="breadcrumb">
       <li><a href="/">Главная</a></li>
-      <li class="active">История</li>
+      <li class="active">История изменений</li>
     </ol>
   {% else %}
     <ol class="breadcrumb">
       <li><a href="/">Главная</a></li>
-      <li><a href="{{ url_for('history.list') }}">История</a></li>
+      <li><a href="{{ url_for('history.list') }}">История изменений</a></li>
       <li class="active">Карта ({{ card_id }})</li>
     </ol>
   {% endif %}
@@ -41,7 +41,13 @@
             <td>{{ row.user.email }}</td>
             <td class="col-md-2">{{ action_title[row.action] }}</td>
             <td class="col-md-2">{{ row.action_date }}</td>
-            <td></td>
+            <td>
+              <a href="{{ url_for('history.show', history_id=row.id) }}" 
+                class="btn btn-primary btn-sm" title="Подробнее">
+                <span class="glyphicon glyphicon-list-alt" aria-hidden="true">
+                </span>
+              </a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>

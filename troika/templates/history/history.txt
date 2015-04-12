@@ -1,0 +1,6 @@
+{% if card %}
+Название на русском: {{ card.name_ru|default('N/A', true) }}
+Название на английском: {{ card.name_en|default('N/A', true) }}
+Статус в Тройке: {{ troika_state_title[card.troika_state] }}
+Статус: {{ status_title[card.status] }}
+{% endif %}

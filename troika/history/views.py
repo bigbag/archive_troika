@@ -40,4 +40,7 @@ def show(history_id):
     if not history:
         abort(404)
 
-    return render_template("history/show.html", history=history)
+    return render_template("history/show.html",
+                           history=history,
+                           to_text=CardsHistory.to_text,
+                           action_title=CardsHistory.ACTION_TITLE)

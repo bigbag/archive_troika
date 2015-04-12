@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+import json
+
+from flask import render_template
 from troika.database import Model, ReferenceCol, SurrogatePK, db, relationship
 from troika.helpers import date_helper
+from troika.card.models import Card
 
 
 class CardsHistory(SurrogatePK, Model):
@@ -32,6 +36,15 @@ class CardsHistory(SurrogatePK, Model):
             self.action_date = date_helper.get_current_date()
 
         db.Model.__init__(self, **kwargs)
+
+    @staticmethod
+    def to_text(data):
+        card = json.loads(data) if data else None
+
+        return render_template("history/history.txt",
+                               card=card,
+                               status_title=Card.STATUS_TITLE,
+                               troika_state_title=Card.TROIKA_STATE_TITLE)
 
     def __repr__(self):
         return '<History ({card_id!r})>'.format(card_id=self.card_id)

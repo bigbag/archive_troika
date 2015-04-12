@@ -1,66 +1,50 @@
 {% extends "layout.html" %}
 
-{% block page_title %}Тройка > Карт > Просмотр ({{ card.hard_id }}){% endblock %}
+{% block page_title %}Тройка > История изменений > Просмотр{% endblock %}
 
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="/">Главная</a></li>
-    <li><a href="/card/">Карты</a></li>
-    <li class="active">Просмотр ({{ card.hard_id }})</li>
+    <li><a href="/card/">История изменений</a></li>
+    <li><a href="{{ url_for('history.list') }}?card_id={{ history.card_id }}">{{ history.card.hard_id }}</a></li>
+    <li class="active">Просмотр</li>
   </ol>
 {% endblock %}
   
 {% block content %}
-
-    <form class="form-horizontal">
-    <div class="form-group">
-      <label for="inputHardId" class="col-sm-2 control-label">Hard ID</label>
-      <div class="col-sm-4">
-        <p class="form-control-static">{{ card.hard_id }}</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputHardId" class="col-sm-2 control-label">Тройка ID</label>
-      <div class="col-sm-4">
-        <p class="form-control-static">{{ card.troika_id }}</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputNameRu" class="col-sm-2 control-label">Название на русском</label>
-      <div class="col-sm-10">
-        <p class="form-control-static">{{ card.name_ru|default('N/A', true) }}</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputNameEn" class="col-sm-2 control-label">Название на англиском</label>
-      <div class="col-sm-10">
-        <p class="form-control-static">{{ card.name_en|default('N/A', true) }}</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputСreationВate" class="col-sm-2 control-label">Дата добавления</label>
-      <div class="col-sm-4">
-        <p class="form-control-static">{{ card.creation_date }}</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputNameEn" class="col-sm-2 control-label">Статус в Тройке</label>
-      <div class="col-sm-4">
-        <p class="form-control-static">{{ troika_state_title[card.troika_state] }}</p>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="inputNameEn" class="col-sm-2 control-label">Статус</label>
-      <div class="col-sm-4">
-        <p class="form-control-static">{{ status_title[card.status] }}</p>
-      </div>
-    </div>
-
-  </form>
+  <table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+          <th class="col-md-2">Attribute</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+    <tbody>
+      <tr>
+        <td>Карта (Hard ID)</td>
+        <td>
+          <a href="{{ url_for('card.show', card_id=history.card_id) }}">
+            {{ history.card.hard_id }}
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td>Пользователь</td>
+        <td>{{ history.user.email }}</td>
+      </tr>
+      <tr>
+        <td>Дата</td>
+        <td>{{ history.action_date }}</td>
+      </tr>
+      <tr>
+        <td>Действие</td>
+        <td>{{ action_title[history.action] }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h4>Изменения:</h4>
+  <div class="row">
+    <div class="col-md-6"><pre>{{ to_text(history.before) }}</pre></div>
+    <div class="col-md-6"><pre>{{ to_text(history.after) }}</pre></div>
+  </div>
 {% endblock %}
