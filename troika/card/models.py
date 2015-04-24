@@ -35,6 +35,9 @@ class Card(SurrogatePK, Model):
                           STATE_NOT_NEED: u'Не нужна',
                           STATE_REISSUED: u'Перевыпущена'}
 
+    REPORT_STATE_NEW = 'new'
+    REPORT_STATE_SENT = 'sent'
+
     hard_id = db.Column(db.String(128), unique=True, nullable=False)
     troika_id = db.Column(db.String(128), unique=True, nullable=False)
     name_ru = db.Column(db.String(300))
@@ -42,6 +45,7 @@ class Card(SurrogatePK, Model):
     creation_date = db.Column(db.DateTime, nullable=False)
     troika_state = db.Column(db.Integer(), nullable=False, default=STATE_ACTIVE)
     status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
+    report_state = db.Column(db.String(128), nullable=False, default=REPORT_STATE_NEW)
 
     def __init__(self, hard_id=None, troika_id=None, **kwargs):
         if hard_id and troika_id:
@@ -50,6 +54,7 @@ class Card(SurrogatePK, Model):
             self.creation_date = date_helper.get_current_date()
             self.troika_state = self.STATE_ACTIVE
             self.status = self.STATUS_NEW
+            self.report_state = self.REPORT_STATE_NEW
 
         db.Model.__init__(self, **kwargs)
 
