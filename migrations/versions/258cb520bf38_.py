@@ -20,7 +20,7 @@ def upgrade():
                     sa.Column('id', sa.Integer(), nullable=False),
                     sa.Column('name', sa.String(length=300), nullable=True),
                     sa.Column('creation_date', sa.DateTime(), nullable=False),
-                    sa.Column('status', sa.String(length=128), nullable=False),
+                    sa.Column('status', sa.String(length=128), nullable=False, server_default='new'),
                     sa.PrimaryKeyConstraint('id')
                     )
     ### end Alembic commands ###
