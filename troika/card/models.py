@@ -66,5 +66,26 @@ class Card(SurrogatePK, Model):
     def to_json(self):
         return json.dumps(self.to_dict())
 
+    def get_status_title(self):
+        status_title = self.STATUS_TITLE
+
+        if self.status == self.STATUS_NEW:
+            return status_title
+
+        if self.status == self.STATUS_DELIVERED:
+            return {
+                self.STATUS_DELIVERED: u'Доставлена',
+                self.STATUS_REMOVED: u'Удалена'
+            }
+        return {self.status: status_title.get(self.status)}
+
+    def get_troika_state_title(self):
+        troika_state_title = self.TROIKA_STATE_TITLE
+
+        if self.troika_state == self.STATE_ACTIVE:
+            return troika_state_title
+
+        return {self.troika_state: troika_state_title.get(self.troika_state)}
+
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)

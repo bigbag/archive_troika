@@ -27,7 +27,7 @@ def list():
     except ValueError:
         abort(404)
 
-    cards = Card.query.paginate(page, Card.PER_PAGE, False)
+    cards = Card.query.order_by('id desc').paginate(page, Card.PER_PAGE, False)
     return render_template("card/list.html",
                            cards=cards,
                            status_title=Card.STATUS_TITLE,
@@ -75,8 +75,8 @@ def edit(card_id):
     return render_template("card/edit.html",
                            card=card,
                            form=form,
-                           status_title=Card.STATUS_TITLE,
-                           troika_state_title=Card.TROIKA_STATE_TITLE)
+                           status_title=card.get_status_title(),
+                           troika_state_title=card.get_troika_state_title())
 
 
 def allowed_file(filename):
