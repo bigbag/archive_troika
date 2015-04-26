@@ -5,12 +5,12 @@
 {% block breadcrumb %}
   <ol class="breadcrumb">
     <li><a href="/">Главная</a></li>
-    <li><a href="/card/">История изменений</a></li>
+    <li><a href="{{ url_for('history.list') }}">История изменений</a></li>
     <li><a href="{{ url_for('history.list') }}?card_id={{ history.card_id }}">{{ history.card.hard_id }}</a></li>
     <li class="active">Просмотр</li>
   </ol>
 {% endblock %}
-  
+
 {% block content %}
   <table class="table table-bordered table-responsive">
     <thead>

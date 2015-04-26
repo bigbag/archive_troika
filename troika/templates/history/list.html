@@ -21,7 +21,10 @@
   <table class="table table-bordered table-responsive">
       <thead>
         <tr>
-          {% if not card_id %}<th>Карта</th>{% endif %}
+          {% if not card_id %}
+            <th>Карта</th>
+            <th>Hard_ID</th>
+          {% endif %}
           <th>Пользователь</th>
           <th>Действие</th>
           <th>Дата</th>
@@ -37,12 +40,13 @@
                   {{ row.card_id }}
                 </a>
               </td>
+              <td>{{ row.card.hard_id }}</td>
             {% endif %}
             <td>{{ row.user.email }}</td>
             <td class="col-md-2">{{ action_title[row.action] }}</td>
             <td class="col-md-2">{{ row.action_date }}</td>
             <td>
-              <a href="{{ url_for('history.show', history_id=row.id) }}" 
+              <a href="{{ url_for('history.show', history_id=row.id) }}"
                 class="btn btn-primary btn-sm" title="Подробнее">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true">
                 </span>
@@ -87,7 +91,7 @@
             </li>
           {% endif %}
         {% endif %}
-        
+
       </ul>
     </nav>
   {% endblock %}
