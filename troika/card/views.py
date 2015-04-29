@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import copy
 import csv
 import logging
 
@@ -55,15 +54,13 @@ def edit(card_id):
     if not card:
         abort(404)
 
-    card_old = copy.deepcopy(card)
+    card.old_card = card.to_json()
     form = CardForm(request.form)
     if request.method == 'POST':
         form.id.data = card.id
         if form.validate():
             form.populate_obj(card)
             if card.save():
-                tasks.update_action.delay(
-                    current_user.id, card.id, card_old.to_json(), card.to_json())
                 flash(u'Данные успешно сохранены', "success")
         else:
             logger.debug('CARD EDIT')

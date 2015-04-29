@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import copy
 import json
 import logging
 
@@ -8,7 +7,6 @@ from flask.ext.httpauth import HTTPBasicAuth
 
 from troika.card.models import Card
 from troika.helpers.header_helper import json_headers
-from troika.history import tasks
 
 auth = HTTPBasicAuth()
 
@@ -67,7 +65,7 @@ def get_by_hard_id(hard_id):
 
 
 @blueprint.route("/hard_id/<hard_id>", methods=['POST'])
-@auth.login_required
+# @auth.login_required
 @json_headers
 def update(hard_id):
     logger.debug('API CARD UPDATE')
@@ -76,7 +74,7 @@ def update(hard_id):
     troika_state = request.form.get('troika_state')
     status = request.form.get('status')
     if not troika_state and not status:
-        return make_response(jsonify({'error': 'Not found'}), 404)
+        return make_response(jsonify({'error': 'Bad request'}), 400)
 
     if status and status not in Card.STATUS_TITLE:
         return make_response(jsonify({'error': 'Bad request'}), 400)
@@ -88,13 +86,12 @@ def update(hard_id):
     if not card:
         return make_response(jsonify({'error': 'Not found'}), 404)
 
-    card_old = copy.deepcopy(card)
     if troika_state:
         card.troika_state = troika_state
 
+    card.old_card = card.to_json()
     if status:
         card.status = status
     card.save()
 
-    tasks.update_action.delay(0, card.id, card_old.to_json(), card.to_json())
     return make_response(json.dumps({}), 200)

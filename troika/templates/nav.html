@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav navbar-left">
         {% for href, id, caption in navigation_bar %}
-          <li{% if id in request.endpoint %} class="active"{% endif%}>
+          <li{% if id in request.endpoint %} class="active"{% endif %}>
             <a class="navbar-link" href="{{ href|e }}">{{ caption|e }}</a>
           </li>
         {% endfor %}

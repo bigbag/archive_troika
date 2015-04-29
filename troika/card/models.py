@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 
+from flask.ext.login import current_user
+
 from troika.database import Model, ReferenceCol, SurrogatePK, db, relationship
 from troika.helpers import date_helper
 
@@ -46,6 +48,7 @@ class Card(SurrogatePK, Model):
     report = relationship('Report', backref='cards')
 
     def __init__(self, hard_id=None, troika_id=None, **kwargs):
+        self.old_card = None
         if hard_id and troika_id:
             self.hard_id = hard_id
             self.troika_id = troika_id
@@ -63,6 +66,7 @@ class Card(SurrogatePK, Model):
             'name_ru': self.name_ru,
             'troika_state': self.troika_state,
             'status': self.status,
+            'report_id': self.report_id,
         }
 
     def to_json(self):
@@ -88,6 +92,22 @@ class Card(SurrogatePK, Model):
             return troika_state_title
 
         return {self.troika_state: troika_state_title.get(self.troika_state)}
+
+    def save(self):
+        from troika.history import tasks as history_tasks
+        result = super(Card, self).save()
+
+        if not result:
+            return result
+
+        user_id = 0
+        if not current_user.is_anonymous:
+            user_id = current_user.id
+
+        history_tasks.update_action(
+            user_id, self.id, self.old_card, self.to_json())
+
+        return self
 
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)
