@@ -3,6 +3,7 @@ import datetime as dt
 import hashlib
 import time
 
+from flask import current_app
 from flask.ext.login import UserMixin
 
 from troika.database import (Column, Model, ReferenceCol, SurrogatePK, db,
@@ -63,6 +64,10 @@ class User(UserMixin, SurrogatePK, Model):
     def update_lastvisit(self):
         self.lastvisit = dt.datetime.utcnow()
         self.save()
+
+    def get_api_user(self):
+        return self.query.filter_by(
+            email=current_app.config.get('API_USER_EMAIL')).first()
 
     def __repr__(self):
         return '<User({email!r})>'.format(email=self.email)

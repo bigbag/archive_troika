@@ -100,7 +100,7 @@ class Card(SurrogatePK, Model):
         if not result:
             return result
 
-        user_id = 0
+        user_id = None
         if not current_user.is_anonymous():
             user_id = current_user.id
 

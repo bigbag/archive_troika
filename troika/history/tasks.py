@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from troika.extensions import celery
+
+from troika.user.models import User
 from troika.history.models import CardsHistory
 
 
@@ -8,6 +10,10 @@ def update_action(user_id, card_id, before, after):
 
     if before == after:
         return
+
+    if not user_id:
+        user = User().get_api_user()
+        user_id = user.id
 
     history = CardsHistory(user_id)
     history.action = CardsHistory.ACTION_UPDATE

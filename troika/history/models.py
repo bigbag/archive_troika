@@ -32,9 +32,8 @@ class CardsHistory(SurrogatePK, Model):
     action_date = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, user_id=None, **kwargs):
-        if user_id:
-            self.user_id = user_id
-            self.action_date = date_helper.get_current_date()
+        self.user_id = user_id
+        self.action_date = date_helper.get_current_date()
 
         db.Model.__init__(self, **kwargs)
 

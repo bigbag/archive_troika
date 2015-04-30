@@ -54,6 +54,7 @@ class Config(object):
 
     # API
     API_USERS = {}
+    API_USER_EMAIL = ""
 
     # DEBUG
     DEBUG = False
