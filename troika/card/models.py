@@ -101,7 +101,7 @@ class Card(SurrogatePK, Model):
             return result
 
         user_id = 0
-        if not current_user.is_anonymous:
+        if not current_user.is_anonymous():
             user_id = current_user.id
 
         history_tasks.update_action.delay(
