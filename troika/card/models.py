@@ -104,10 +104,10 @@ class Card(SurrogatePK, Model):
         if not current_user.is_anonymous:
             user_id = current_user.id
 
-        history_tasks.update_action(
-            user_id, self.id, self.old_card, self.to_json())
+        history_tasks.update_action.delay(
+            user_id, result.id, result.old_card, result.to_json())
 
-        return self
+        return result
 
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)
