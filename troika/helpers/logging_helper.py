@@ -55,6 +55,10 @@ def setup_loggers(logs_settings, logs_enabled, logs_level, logs_dir,
             'level': logs_level,
             'handlers': ['console', 'all_file']
         },
+        'models': {
+            'level': logs_level,
+            'handlers': ['console', 'all_file']
+        },
         'celery.worker': {
             'level': logs_level,
             'handlers': ['celery_file']

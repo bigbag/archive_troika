@@ -13,6 +13,8 @@ from .extensions import db
 Column = db.Column
 relationship = relationship
 
+logger = logging.getLogger('models')
+
 
 class CRUDMixin(object):
     """Mixin that adds convenience methods for CRUD (create, read, update, delete)
@@ -40,7 +42,7 @@ class CRUDMixin(object):
                 db.session.commit()
             except Exception as e:
                 db.session.rollback()
-                logging.error(e)
+                logger.error(e)
                 return False
         return self
 
