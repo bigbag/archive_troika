@@ -2,6 +2,7 @@
 import os
 
 from troika.helpers.logging_helper import setup_loggers
+from celery.schedules import crontab
 
 os_env = os.environ
 
@@ -91,7 +92,15 @@ class Config(object):
     USE_CELERY = True
     CELERY_BROKER_URL = ''
     CELERY_RESULT_BACKEND = ''
-    CELERY_IMPORTS = ('troika.history.tasks', )
+    CELERY_IMPORTS = ('troika.history.tasks',
+                      'troika.report.tasks')
+    CELERYBEAT_SCHEDULE = {
+        'empty-recovery-limit-day': {
+            'task': 'troika.report.tasks.send_stop_list',
+            'schedule': crontab(minute='*/1'),
+            'args': (),
+        }
+    }
 
     CELERYD_PREFETCH_MULTIPLIER = 1
     CELERYD_TASK_SOFT_TIME_LIMIT = 20 * 60  # Raise exception if task takes too long.
@@ -103,6 +112,16 @@ class Config(object):
     CELERY_TASK_RESULT_EXPIRES = 10 * 60  # Dispose of Celery Beat results after 10 minutes.
     CELERY_TASK_SERIALIZER = 'json'
     CELERY_TRACK_STARTED = True
+
+    # BUSINESS
+    ISSUER_ID = 111
+
+    # REPORT
+    REPORT_PATCH = os.path.join(TEMP_DIR, 'report')
+
+    FTP_HOST = ''
+    FTP_USER = ''
+    FTP_PASSWORD = ''
 
     # LOGGING
     LOG_ENABLE = True
@@ -122,13 +141,6 @@ class Config(object):
             },
         }
     }
-
-    # BUSINESS
-    ISSUERS = 111
-
-    FTP_HOST = ''
-    FTP_USER = ''
-    FTP_PASSWORD = ''
 
     setup_loggers(LOG_SETTINGS, LOG_ENABLE, LOG_LEVEL, LOG_DIR, LOG_MAX_SIZE)
 
