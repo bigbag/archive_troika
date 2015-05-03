@@ -16,9 +16,7 @@ blueprint = Blueprint("history", __name__, url_prefix='/history',
 @blueprint.route("/", methods=['GET'])
 @login_required
 def list():
-    from troika.report.tasks import send_stop_list
 
-    print send_stop_list()
     try:
         page = int(request.args.get('page', 1))
         card_id = int(request.args.get('card_id', 0))
