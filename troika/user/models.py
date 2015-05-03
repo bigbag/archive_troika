@@ -8,7 +8,7 @@ from flask.ext.login import UserMixin
 
 from troika.database import (Column, Model, ReferenceCol, SurrogatePK, db,
                              relationship)
-from troika.extensions import bcrypt
+from troika.extensions import bcrypt, cache
 
 
 class Role(SurrogatePK, Model):
@@ -65,9 +65,13 @@ class User(UserMixin, SurrogatePK, Model):
         self.lastvisit = dt.datetime.utcnow()
         self.save()
 
-    def get_api_user(self):
-        return self.query.filter_by(
+    @cache.cached(timeout=6000)
+    def get_api_user_id(self):
+        user = self.query.filter_by(
             email=current_app.config.get('API_USER_EMAIL')).first()
+        if not user:
+            return 0
+        return user.id
 
     def __repr__(self):
         return '<User({email!r})>'.format(email=self.email)
