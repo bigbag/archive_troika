@@ -12,8 +12,7 @@ def update_action(user_id, card_id, before, after):
         return
 
     if not user_id:
-        user = User().get_api_user()
-        user_id = user.id
+        user_id = User().get_api_user_id()
 
     history = CardsHistory(user_id)
     history.action = CardsHistory.ACTION_UPDATE

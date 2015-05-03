@@ -97,14 +97,14 @@ class Config(object):
     CELERYBEAT_SCHEDULE = {
         'empty-recovery-limit-day': {
             'task': 'troika.report.tasks.send_stop_list',
-            'schedule': crontab(minute='*/1'),
+            'schedule': crontab(minute='*/15'),
             'args': (),
         }
     }
 
     CELERYD_PREFETCH_MULTIPLIER = 1
-    CELERYD_TASK_SOFT_TIME_LIMIT = 20 * 60  # Raise exception if task takes too long.
-    CELERYD_TASK_TIME_LIMIT = 30 * 60  # Kill worker if task takes way too long.
+    CELERYD_TASK_SOFT_TIME_LIMIT = 5 * 60
+    CELERYD_TASK_TIME_LIMIT = 10 * 60
     CELERY_ACCEPT_CONTENT = ['json']
     CELERY_ACKS_LATE = True
     CELERY_DISABLE_RATE_LIMITS = True
@@ -117,11 +117,12 @@ class Config(object):
     ISSUER_ID = 111
 
     # REPORT
-    REPORT_PATCH = os.path.join(TEMP_DIR, 'report')
+    REPORT_DIR = os.path.join(TEMP_DIR, 'report')
 
     FTP_HOST = ''
     FTP_USER = ''
     FTP_PASSWORD = ''
+    FTP_STOPLIST_DIR = 'STOPLIST'
 
     # LOGGING
     LOG_ENABLE = True

@@ -37,6 +37,8 @@ class Card(SurrogatePK, Model):
                           STATE_NOT_NEED: u'Не нужна',
                           STATE_REISSUED: u'Перевыпущена'}
 
+    TROIKA_STATE_LOCKED = (STATE_LOST, STATE_BROKEN, STATE_NOT_NEED, STATE_REISSUED)
+
     hard_id = db.Column(db.String(128), unique=True, nullable=False)
     troika_id = db.Column(db.String(128), unique=True, nullable=False)
     name_ru = db.Column(db.String(300))
@@ -87,11 +89,16 @@ class Card(SurrogatePK, Model):
 
     def get_troika_state_title(self):
         troika_state_title = self.TROIKA_STATE_TITLE
-
         if self.troika_state == self.STATE_ACTIVE:
             return troika_state_title
 
         return {self.troika_state: troika_state_title.get(self.troika_state)}
+
+    def get_locked(self):
+        cards = self.query.filter(Card.troika_state.in_(self.TROIKA_STATE_LOCKED)).\
+            filter(Card.report_id.is_(None)).all()
+
+        return cards
 
     def save(self):
         from troika.history import tasks as history_tasks

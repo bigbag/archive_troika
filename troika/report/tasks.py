@@ -1,24 +1,39 @@
 # -*- coding: utf-8 -*-
-from ftplib import FTP_TLS
-from flask import current_app
+from flask.ext.celery import single_instance
 
+from troika.card.models import Card
+from troika.database import db
 from troika.extensions import celery
+from troika.report.models import Report
 
 
-@celery.task()
+@celery.task(bind=True)
+@single_instance(lock_timeout=15 * 60)
 def send_stop_list():
-    ftps = FTP_TLS(current_app.config.get('FTP_HOST'))
-    ftps.login(current_app.config.get('FTP_USER'),
-               current_app.config.get('FTP_PASSWORD'))
-    ftps.prot_p()
+    cards = Card().get_locked()
+    if not cards:
+        return None
 
-    demo = ftps.retrlines('LIST')
+    file_name, day_id = Report.generate_name()
+    if not Report.save_report_file(file_name, cards):
+        return False
 
-    # filename = 'remote_filename.bin'
-    # print 'Opening local file ' + filename
-    # myfile = open(filename, 'wb')
+    report = Report(file_name)
+    report.day_id = day_id
+    report.save()
 
-    # ftps.retrbinary('RETR %s' % filename, myfile.write)
+    result = Report.send_report_file(file_name)
+    if not result:
+        report.status = Report.STATUS_ERROR
+        report.save()
+        return False
 
-    ftps.close()
-    return demo
+    report.status = Report.STATUS_SENT
+    report.save()
+
+    for card in cards:
+        card.report_id = report.id
+        db.session.add(card)
+
+    db.session.commit()
+    return True
