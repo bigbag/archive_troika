@@ -45,7 +45,8 @@ def create():
     if form.validate():
         order = Order()
         form.populate_obj(order)
-        order.save()
+        if not order.save():
+            return make_response(json.dumps({'error': 'Duplicate entry'}), 400)
 
         return make_response(json.dumps({'id': order.id}), 201)
     else:
