@@ -19,8 +19,12 @@ blueprint = Blueprint("card_api", __name__, url_prefix='/api/card',
 @auth.get_password
 def get_pw(username):
     users = current_app.config.get('API_USERS')
-    if username in users:
-        return users.get(username)
+    if not users:
+        return None
+
+    api_users = users.get(blueprint.name)
+    if username in api_users:
+        return api_users.get(username)
     return None
 
 
