@@ -65,7 +65,7 @@ def get_by_hard_id(hard_id):
 
 
 @blueprint.route("/hard_id/<hard_id>", methods=['POST'])
-# @auth.login_required
+@auth.login_required
 @json_headers
 def update(hard_id):
     logger.debug('API CARD UPDATE')
