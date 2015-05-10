@@ -46,6 +46,8 @@ class Card(SurrogatePK, Model):
     creation_date = db.Column(db.DateTime, nullable=False)
     troika_state = db.Column(db.Integer(), index=True, nullable=False, default=STATE_ACTIVE)
     status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
+    order_id = ReferenceCol('orders', nullable=True)
+    order = relationship('Order', backref='cards')
     report_id = ReferenceCol('reports', nullable=True)
     report = relationship('Report', backref='cards')
 
