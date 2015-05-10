@@ -54,7 +54,7 @@ class Config(object):
     TESTING = False
 
     # API
-    API_USERS = {}
+    API_USERS = {'card_api': {}, 'order_api': {}}
     API_USER_EMAIL = ""
 
     # DEBUG
