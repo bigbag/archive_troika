@@ -17,18 +17,16 @@ class Order(SurrogatePK, Model):
     STATUS_REGISTERED = 'registred'
     STATUS_ERROR = 'error'
 
-    user_id = db.Column(db.Integer(), nullable=False)
-    user_email = db.Column(db.String(128), nullable=False)
+    user_id = db.Column(db.Integer(), nullable=False, unique=True)
+    user_email = db.Column(db.String(128), nullable=False, unique=True)
     creation_date = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
 
-    def __init__(self, mobispot_user_id=None, **kwargs):
-        if mobispot_user_id:
-            self.mobispot_user_id = mobispot_user_id
-            self.creation_date = date_helper.get_current_date()
+    def save(self):
+        if not self.status:
             self.status = self.STATUS_NEW
 
-        db.Model.__init__(self, **kwargs)
+        if not self.creation_date:
+            self.creation_date = date_helper.get_current_date()
 
-    def __repr__(self):
-        return '<Order for user ({mobispot_user_email!r})>'.format(name=self.mobispot_user_email)
+        return super(Order, self).save()

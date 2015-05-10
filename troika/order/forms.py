@@ -14,7 +14,8 @@ class OrderForm(Form):
         'Mobispot user email',
         validators=[DataRequired(message=u'Поле обязательно для заполнения'), ])
 
-    status = StringField(u'Статус')
-
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
+
+    def validate_csrf_token(self, field):
+        pass
