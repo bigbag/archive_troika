@@ -18,6 +18,7 @@ class Order(SurrogatePK, Model):
     STATUS_ERROR = 'error'
 
     mobispot_user_id = db.Column(db.Integer(), nullable=False)
+    mobispot_user_email = db.Column(db.String(128), nullable=False)
     creation_date = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
 
@@ -30,4 +31,4 @@ class Order(SurrogatePK, Model):
         db.Model.__init__(self, **kwargs)
 
     def __repr__(self):
-        return '<Order for user ({mobispot_user_id!r})>'.format(name=self.mobispot_user_id)
+        return '<Order for user ({mobispot_user_email!r})>'.format(name=self.mobispot_user_email)
