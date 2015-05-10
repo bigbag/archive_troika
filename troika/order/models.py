@@ -17,8 +17,8 @@ class Order(SurrogatePK, Model):
     STATUS_REGISTERED = 'registred'
     STATUS_ERROR = 'error'
 
-    mobispot_user_id = db.Column(db.Integer(), nullable=False)
-    mobispot_user_email = db.Column(db.String(128), nullable=False)
+    user_id = db.Column(db.Integer(), nullable=False)
+    user_email = db.Column(db.String(128), nullable=False)
     creation_date = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
 

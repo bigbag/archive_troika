@@ -7,10 +7,10 @@ from wtforms.validators import DataRequired
 class OrderForm(Form):
 
     id = IntegerField()
-    mobispot_user_id = IntegerField(
+    user_id = IntegerField(
         'Mobispot user id',
         validators=[DataRequired(message=u'Поле обязательно для заполнения'), ])
-    mobispot_user_email = StringField(
+    user_email = StringField(
         'Mobispot user email',
         validators=[DataRequired(message=u'Поле обязательно для заполнения'), ])
 
