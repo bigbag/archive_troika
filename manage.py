@@ -8,9 +8,11 @@ from flask.ext.script import Command, Manager, Server, Shell
 from celery.app.log import Logging
 from celery.bin.celery import main as celery_main
 from troika.app import create_app
+from troika.database import db
+
 from troika.card.command import AddCard
 from troika.card.models import Card
-from troika.database import db
+from troika.order.models import Order
 from troika.report.models import Report
 from troika.user.command import AddUser
 from troika.user.models import User
@@ -38,7 +40,12 @@ def _make_context():
     """Return context dict for a shell session so you can access
     app, db, and the User model by default.
     """
-    return {'app': app, 'db': db, 'User': User, 'Card': Card, 'Report': Report}
+    return {'app': app,
+            'db': db,
+            'User': User,
+            'Card': Card,
+            'Order': Order,
+            'Report': Report}
 
 
 manager.add_command('server', Server(host=app.config['APP_HOST'],

@@ -4,6 +4,7 @@ from troika.app import create_app
 
 from troika.card.models import Card
 from troika.history.models import CardsHistory
+from troika.order.models import Order
 from troika.report.models import Report
 from troika.user.models import User
 
