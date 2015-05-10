@@ -2,7 +2,7 @@
 import json
 import logging
 
-from flask import abort, Blueprint, current_app, jsonify, make_response, request
+from flask import Blueprint, current_app, jsonify, make_response, request
 from flask.ext.httpauth import HTTPBasicAuth
 
 from troika.order.models import Order

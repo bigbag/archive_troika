@@ -6,6 +6,7 @@ from flask import Blueprint, current_app, jsonify, make_response, request
 from flask.ext.httpauth import HTTPBasicAuth
 
 from troika.card.models import Card
+from troika.order.models import Order
 from troika.helpers.header_helper import json_headers
 
 auth = HTTPBasicAuth()
@@ -55,6 +56,37 @@ def get_new():
         result.append(card.to_dict())
 
     return make_response(json.dumps(result), 200)
+
+
+@blueprint.route("/release", methods=['POST'])
+@auth.login_required
+@json_headers
+def release_card():
+    logger.debug('API CARD RELEASE')
+    logger.debug('Request data: %(data)s' % {'data': request.form})
+
+    hard_id = request.form.get('hard_id')
+    if not hard_id:
+        return make_response(jsonify({'error': 'Not valid request'}), 400)
+
+    order = Order.query.filter_by(status=Order.STATUS_NEW).first()
+    if not order:
+        return make_response(jsonify({'error': 'Not found new order'}), 404)
+
+    card = Card().get_new_and_active(hard_id)
+    if not card:
+        return make_response(jsonify({'error': 'Not found card'}), 404)
+
+    order.status = Order.STATUS_COMPLETED
+    order.save()
+
+    card.old_card = card.to_json()
+    card.status = Card.STATUS_INPROGRESS
+    card.order_id = order.id
+    card.save()
+
+    return make_response(json.dumps({'card_id': card.id,
+                                     'user_id': order.user_id}), 200)
 
 
 @blueprint.route("/hard_id/<hard_id>", methods=['GET'])

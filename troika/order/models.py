@@ -14,7 +14,7 @@ class Order(SurrogatePK, Model):
     PER_PAGE = 50
 
     STATUS_NEW = 'new'
-    STATUS_REGISTERED = 'registred'
+    STATUS_COMPLETED = 'completed'
     STATUS_ERROR = 'error'
 
     user_id = db.Column(db.Integer(), nullable=False, unique=True)

@@ -70,6 +70,7 @@ class Card(SurrogatePK, Model):
             'name_ru': self.name_ru,
             'troika_state': self.troika_state,
             'status': self.status,
+            'order_id': self.order_id,
             'report_id': self.report_id,
         }
 
@@ -97,10 +98,13 @@ class Card(SurrogatePK, Model):
         return {self.troika_state: troika_state_title.get(self.troika_state)}
 
     def get_locked(self):
-        cards = self.query.filter(Card.troika_state.in_(self.TROIKA_STATE_LOCKED)).\
+        return self.query.filter(Card.troika_state.in_(self.TROIKA_STATE_LOCKED)).\
             filter(Card.report_id.is_(None)).all()
 
-        return cards
+    def get_new_and_active(self, hard_id):
+        return self.query.filter_by(hard_id=hard_id).\
+            filter_by(status=self.STATUS_NEW).\
+            filter_by(troika_state=self.STATE_ACTIVE).first()
 
     def save(self):
         from troika.history import tasks as history_tasks
