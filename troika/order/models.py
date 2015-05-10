@@ -20,9 +20,11 @@ class Order(SurrogatePK, Model):
     user_id = db.Column(db.Integer(), nullable=False, unique=True)
     user_email = db.Column(db.String(128), nullable=False, unique=True)
     creation_date = db.Column(db.DateTime, nullable=False)
+    update_date = db.Column(db.DateTime, default=date_helper.get_current_date())
     status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
 
     def save(self):
+        self.update_date = date_helper.get_current_date()
         if not self.status:
             self.status = self.STATUS_NEW
 

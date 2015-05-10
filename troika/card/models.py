@@ -44,6 +44,7 @@ class Card(SurrogatePK, Model):
     name_ru = db.Column(db.String(300))
     name_en = db.Column(db.String(300))
     creation_date = db.Column(db.DateTime, nullable=False)
+    update_date = db.Column(db.DateTime, default=date_helper.get_current_date())
     troika_state = db.Column(db.Integer(), index=True, nullable=False, default=STATE_ACTIVE)
     status = db.Column(db.String(128), nullable=False, default=STATUS_NEW)
     order_id = ReferenceCol('orders', nullable=True)
@@ -108,6 +109,8 @@ class Card(SurrogatePK, Model):
 
     def save(self):
         from troika.history import tasks as history_tasks
+        self.update_date = date_helper.get_current_date()
+
         result = super(Card, self).save()
 
         if not result:
