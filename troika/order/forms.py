@@ -9,6 +9,7 @@ class OrderForm(Form):
     id = IntegerField()
     user_id = IntegerField('Mobispot user id', validators=[DataRequired()])
     user_email = StringField('Mobispot user email', validators=[DataRequired()])
+    image = StringField('User image', validators=[DataRequired()])
 
     def __init__(self, *args, **kwargs):
         super(OrderForm, self).__init__(*args, **kwargs)
