@@ -69,6 +69,19 @@ def release_card():
     if not hard_id:
         return make_response(jsonify({'error': 'Not valid request'}), 400)
 
+    user_id = request.form.get('user_id')
+    user_email = request.form.get('user_email')
+
+    result = {}
+    if user_id and user_email:
+        result = release_card_with_user(hard_id, user_id, user_email)
+    else:
+        result = release_card_with_order(hard_id)
+
+    return make_response(json.dumps(result), 200)
+
+
+def release_card_with_order(hard_id):
     order = Order.query.filter_by(status=Order.STATUS_NEW).first()
     if not order:
         return make_response(jsonify({'error': 'Not found new order'}), 404)
@@ -85,8 +98,42 @@ def release_card():
     card.order_id = order.id
     card.save()
 
-    return make_response(json.dumps({'card_id': card.id,
-                                     'user_id': order.user_id}), 200)
+    logger.debug('Release card id %(id)s with order' % {
+        'id': card.id
+    })
+
+    return {
+        'card_id': card.id,
+        'user_id': order.user_id,
+        'user_email': order.user_email
+    }
+
+
+def release_card_with_user(hard_id, user_id, user_email):
+    card = Card().get_new_and_active(hard_id)
+    if not card:
+        return make_response(jsonify({'error': 'Not found card'}), 404)
+
+    order = Order()
+    order.user_id = user_id
+    order.user_email = user_email
+    order.status = Order.STATUS_COMPLETED
+    order.save()
+
+    card.old_card = card.to_json()
+    card.status = Card.STATUS_INPROGRESS
+    card.order_id = order.id
+    card.save()
+
+    logger.debug('Release card id %(id)s with user' % {
+        'id': card.id
+    })
+
+    return {
+        'card_id': card.id,
+        'user_id': user_id,
+        'user_email': user_email
+    }
 
 
 @blueprint.route("/hard_id/<hard_id>", methods=['GET'])
