@@ -78,7 +78,7 @@ def release_card():
     else:
         result = release_card_with_order(hard_id)
 
-    return make_response(json.dumps(result), 200)
+    return result
 
 
 def release_card_with_order(hard_id):
@@ -102,15 +102,15 @@ def release_card_with_order(hard_id):
         'id': card.id
     })
 
-    return {
+    return make_response(json.dumps({
         'card_id': card.id,
         'user_id': order.user_id,
         'user_email': order.user_email
-    }
+    }), 200)
 
 
 def release_card_with_user(hard_id, user_id, user_email):
-    card = Card().get_new_and_active(hard_id)
+    card = Card().get_new_and_active(int(hard_id))
     if not card:
         return make_response(jsonify({'error': 'Not found card'}), 404)
 
@@ -129,11 +129,11 @@ def release_card_with_user(hard_id, user_id, user_email):
         'id': card.id
     })
 
-    return {
+    return make_response(json.dumps({
         'card_id': card.id,
         'user_id': user_id,
         'user_email': user_email
-    }
+    }), 200)
 
 
 @blueprint.route("/hard_id/<hard_id>", methods=['GET'])
