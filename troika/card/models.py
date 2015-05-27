@@ -84,11 +84,27 @@ class Card(SurrogatePK, Model):
         if self.status == self.STATUS_NEW:
             return status_title
 
+        if self.status == self.STATUS_INPROGRESS:
+            return {
+                self.STATUS_INPROGRESS: u'В процессе',
+                self.STATUS_RELEASED: u'Выпущена',
+                self.STATUS_DELIVERED: u'Доставлена',
+                self.STATUS_REMOVED: u'Удалена'
+            }
+
+        if self.status == self.STATUS_RELEASED:
+            return {
+                self.STATUS_RELEASED: u'Выпущена',
+                self.STATUS_DELIVERED: u'Доставлена',
+                self.STATUS_REMOVED: u'Удалена'
+            }
+
         if self.status == self.STATUS_DELIVERED:
             return {
                 self.STATUS_DELIVERED: u'Доставлена',
                 self.STATUS_REMOVED: u'Удалена'
             }
+
         return {self.status: status_title.get(self.status)}
 
     def get_troika_state_title(self):
