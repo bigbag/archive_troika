@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Тройка > Список карт{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="/">Главная</a></li>
+    <li class="active">Заявки на карты</li>
+  </ol>
+{% endblock %}
+
+{% block content %}
+  <table class="table table-bordered table-responsive">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>User Email</th>
+        <th>Дата создания</th>
+        <th>Статус</th>
+        <th class="col-md-1"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders.items %}
+        <tr>
+          <td>{{ order.id }}</td>
+          <td>{{ order.user_id }}</td>
+          <td>{{ order.user_email }}</td>
+          <td>{{ order.creation_date }}</td>
+          <td>{{ status_title[order.status] }}</td>
+          <td>
+            <a href="{{ url_for('order.show', order_id=order.id) }}"
+              class="btn btn-primary btn-sm" title="Подробнее">
+              <span class="glyphicon glyphicon-list-alt" aria-hidden="true">
+              </span>
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% block pagination %}
+    <nav>
+      <ul class="pager">
+        {% if orders.has_prev %}
+        <li>
+          <a href="{{ url_for('card.list') }}?page={{ orders.prev_num }}">
+            Previous
+          </a>
+        </li>
+        {% endif %}
+        {% if orders.has_next %}
+        <li>
+          <a href="{{ url_for('card.list') }}?page={{ orders.next_num }}">
+            Next
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endblock %}
+{% endblock %}
