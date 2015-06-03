@@ -94,6 +94,9 @@ def parsing_csv(file):
     cards = []
     reader = csv.reader(csvfile.split('\n'), dialect)
     for row in reader:
+        if len(row) < 2:
+            continue
+
         card = Card(row[0], row[1])
         old_card = Card.query.filter(
             (Card.hard_id == card.hard_id) |
