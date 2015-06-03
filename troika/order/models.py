@@ -17,6 +17,10 @@ class Order(SurrogatePK, Model):
     STATUS_COMPLETED = 'completed'
     STATUS_ERROR = 'error'
 
+    STATUS_TITLE = {STATUS_NEW: u'Новая',
+                    STATUS_COMPLETED: u'Выполнена',
+                    STATUS_ERROR: u'Ошибочная'}
+
     user_id = db.Column(db.Integer(), nullable=False, unique=True)
     user_email = db.Column(db.String(128), nullable=False, unique=True)
     image = db.Column(db.String(512))

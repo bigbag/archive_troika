@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Тройка > Заявки на карты > Просмотр{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="/">Главная</a></li>
+    <li><a href="{{ url_for('order.list') }}">Заявки на карты</a></li>
+    <li class="active">Просмотр</li>
+  </ol>
+{% endblock %}
+
+<td></td>
+          <td></td>
+          <td>{{ order.user_email }}</td>
+          <td>{{ order.creation_date }}</td>
+          <td>{{ status_title[order.status] }}</td>
+{% block content %}
+  <table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+          <th class="col-md-2">Attribute</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+    <tbody>
+      <tr>
+        <td>ID</td>
+        <td>{{ order.id }}</td>
+      </tr>
+      <tr>
+        <td>User ID</td>
+        <td>{{ order.user_id }}</td>
+      </tr>
+      <tr>
+        <td>User Email</td>
+        <td>{{ order.user_email }}</td>
+      </tr>
+      <tr>
+        <td>Дата создания</td>
+        <td>{{ order.creation_date }}</td>
+      </tr>
+      <tr>
+        <td>Статус</td>
+        <td>{{ status_title[order.status] }}</td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}
