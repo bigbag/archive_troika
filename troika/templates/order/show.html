@@ -44,6 +44,42 @@
         <td>Статус</td>
         <td>{{ status_title[order.status] }}</td>
       </tr>
+      <tr>
+        <td>Имя на карте</td>
+        <td>{{ order.name|default('N/A', true) }}</td>
+      </tr>
+      <tr>
+        <td>Должность на карте</td>
+        <td>{{ order.position|default('N/A', true) }}</td>
+      </tr>
+      {% if order.image %}
+      <tr>
+        <td>Макет карты</td>
+        <td>
+          <img src="{{ order.image }}" alt="Image" height="400"/>
+        </td>
+      </tr>
+      {% endif %}
+      {% if order.photo %}
+      <tr>
+        <td>Оригинальная картинка</td>
+        <td>
+          <a href="{{ order.photo }}" title="Скачать оригинальное изображение">
+            <img src="{{ order.photo }}" alt="Photo" height="400"/>
+          </a>
+        </td>
+      </tr>
+      {% endif %}
+      {% if order.logo %}
+      <tr>
+        <td>Оригинальный логотип</td>
+        <td>
+          <a href="{{ order.logo }}" title="Скачать оригинальное изображение">
+            <img src="{{ order.logo }}" alt="Logo" height="400"/>
+          </a>
+        </td>
+      </tr>
+      {% endif %}
     </tbody>
   </table>
 {% endblock %}
