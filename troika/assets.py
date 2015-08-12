@@ -11,8 +11,11 @@ css = Bundle(
 
 js = Bundle(
     "libs/jQuery/dist/jquery.js",
+    "libs/angular/dist/angular.js",
     "libs/bootstrap/dist/js/bootstrap.js",
     "js/script.js",
+    "angular/app.js",
+    "angular/controllers/card.js",
     filters='jsmin',
     output="public/js/common.js"
 )

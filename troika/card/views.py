@@ -23,14 +23,22 @@ def list():
 
     try:
         page = int(request.args.get('page', 1))
+        troika_id = str(request.args.get('troika_id', ''))
     except ValueError:
         abort(404)
 
-    cards = Card.query.order_by('id desc').paginate(page, Card.PER_PAGE, False)
+    query = Card.query
+    
+    if troika_id:
+        query = query.filter(Card.troika_id.like('%' + troika_id + '%'))
+        
+    cards = query.order_by('id desc').paginate(page, Card.PER_PAGE, False)
     return render_template("card/list.html",
                            cards=cards,
                            status_title=Card.STATUS_TITLE,
-                           troika_state_title=Card.TROIKA_STATE_TITLE)
+                           troika_state_title=Card.TROIKA_STATE_TITLE,
+                           troika_id=troika_id,
+                           )
 
 
 @blueprint.route("/<int:card_id>", methods=['GET'])

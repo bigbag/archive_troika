@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-  <table class="table table-bordered table-responsive">
+  <table class="table table-bordered table-responsive" ng-controller="CardController">
       <thead>
         <tr>
           <th>Hard ID</th>
@@ -18,6 +18,19 @@
           <th>Статус в Тройке</th>
           <th>Статус</th>
           <th class="col-md-1"></th>
+        </tr>
+        <tr>
+          <th></th>
+          <th>
+            <input type="text" ng-model="search.troika_id" ng-keypress="($event.keyCode == 13)?searchCards(search):''" ng-init="search.troika_id='{{ troika_id }}'">
+              <a ng-click="searchCards(search)" class="btn btn-primary btn-sm" title="Поиск">
+                <span class="glyphicon glyphicon-search" aria-hidden="true">
+                </span>
+              </a>
+          </th>
+          <th></th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -52,14 +65,14 @@
       <ul class="pager">
         {% if cards.has_prev %}
         <li>
-          <a href="{{ url_for('card.list') }}?page={{ cards.prev_num }}">
+          <a href="{{ url_for('card.list') }}?page={{ cards.prev_num }}{% if troika_id %}&troika_id={{ troika_id }}{% endif %}">
             Previous
           </a>
         </li>
         {% endif %}
         {% if cards.has_next %}
         <li>
-          <a href="{{ url_for('card.list') }}?page={{ cards.next_num }}">
+          <a href="{{ url_for('card.list') }}?page={{ cards.next_num }}{% if troika_id %}&troika_id={{ troika_id }}{% endif %}">
             Next
           </a>
         </li>
