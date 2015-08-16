@@ -138,7 +138,7 @@ footer .footer-nav {
 .bs-callout .highlight {
   background-color: #fff;
 }
- 
+
 /* Themes for different contexts */
 .bs-callout-danger {
   background-color: #fcf2f2;
@@ -153,4 +153,12 @@ footer .footer-nav {
 .bs-callout-info {
   background-color: #f0f7fd;
   border-color: #d0e3f0;
-} 
+}
+
+.filters-block_hide {
+  display: none;
+}
+
+.filters-block_show {
+  display: block;
+}

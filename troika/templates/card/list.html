@@ -2,15 +2,66 @@
 
 {% block page_title %}Тройка > Список карт{% endblock %}
 
-{% block breadcrumb %}
-  <ol class="breadcrumb">
-    <li><a href="/">Главная</a></li>
-    <li class="active">Карты</li>
-  </ol>
+{% block menu %}
+  <div class="row">
+    <div class="col-md-10">
+      <ol class="breadcrumb">
+        <li><a href="/">Главная</a></li>
+        <li class="active">Карты</li>
+      </ol>
+    </div>
+    <div class="col-md-2 text-right">
+      <a href="javascript:;"
+        class="btn btn-primary btn-sm" id="show-filters" title="Фильтр">
+        <span class="glyphicon glyphicon glyphicon-search" aria-hidden="true">
+        </span>
+      </a>
+      <a href="{{ url_for('card.import_cards') }}"
+        class="btn btn-primary btn-sm" title="Импорт">
+        <span class="glyphicon glyphicon glyphicon-import" aria-hidden="true">
+        </span>
+      </a>
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}
-  <table class="table table-bordered table-responsive" ng-controller="CardController">
+  <div class="row filters-block {% if not search_data %}filters-block_hide{% endif %}">
+    <div class="col-md-10">
+      <form class="form-horizontal" role="form" method="POST">
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="hard_id">Hard ID:</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control"
+              pattern=".{0}|.{3,}" title="Минимум 3 символа"
+              name="hard_id" id="hard_id"
+              {% if 'hard_id' in search_data %}
+                value="{{ search_data['hard_id'] }}"
+              {% endif %}>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="troika_id">Тройка ID:</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control"
+              pattern=".{0}|.{3,}" itle="Минимум 3 символа"
+              name="troika_id" id="troika_id"
+              {% if 'troika_id' in search_data %}
+                value="{{ search_data['troika_id'] }}"
+              {% endif %}>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="reset" class="btn btn-default">Сбросить</button>
+            <button type="submit" class="btn btn-default">Найти</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <table class="table table-bordered table-responsive">
       <thead>
         <tr>
           <th>Hard ID</th>
@@ -18,19 +69,6 @@
           <th>Статус в Тройке</th>
           <th>Статус</th>
           <th class="col-md-1"></th>
-        </tr>
-        <tr>
-          <th></th>
-          <th>
-            <input type="text" ng-model="search.troika_id" ng-keypress="($event.keyCode == 13)?searchCards(search):''" ng-init="search.troika_id='{{ troika_id }}'">
-              <a ng-click="searchCards(search)" class="btn btn-primary btn-sm" title="Поиск">
-                <span class="glyphicon glyphicon-search" aria-hidden="true">
-                </span>
-              </a>
-          </th>
-          <th></th>
-          <th></th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -49,7 +87,7 @@
                 <span class="glyphicon glyphicon-edit" aria-hidden="true">
                 </span>
               </a>
-              <a href="{{ url_for('history.list') }}?card_id={{ card.id }}" 
+              <a href="{{ url_for('history.list') }}?card_id={{ card.id }}"
                 class="btn btn-primary btn-sm" title="История изменений">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true">
                 </span>

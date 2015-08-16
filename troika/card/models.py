@@ -13,6 +13,8 @@ class Card(SurrogatePK, Model):
 
     PER_PAGE = 50
 
+    SEARCH_KEYS = ('troika_id', 'hard_id')
+
     STATUS_NEW = 'new'
     STATUS_INPROGRESS = 'inprogress'
     STATUS_RELEASED = 'released'

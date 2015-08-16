@@ -20,25 +20,41 @@ blueprint = Blueprint("card", __name__, url_prefix='/card',
 @blueprint.route("/", methods=['GET'])
 @login_required
 def list():
-
     try:
         page = int(request.args.get('page', 1))
-        troika_id = str(request.args.get('troika_id', ''))
     except ValueError:
         abort(404)
 
+    cards = Card.query.order_by('id desc').paginate(page, Card.PER_PAGE, False)
+    return render_template("card/list.html",
+                           cards=cards,
+                           status_title=Card.STATUS_TITLE,
+                           troika_state_title=Card.TROIKA_STATE_TITLE,
+                           )
+
+
+@blueprint.route("/", methods=['POST'])
+@login_required
+def search():
+    try:
+        page = int(request.args.get('page', 1))
+    except ValueError:
+        abort(404)
+
+    search_data = {}
     query = Card.query
-    
-    if troika_id:
-        query = query.filter(Card.troika_id.like('%' + troika_id + '%'))
-        
+    for key in Card.SEARCH_KEYS:
+        value = request.form.get(key)
+        if value:
+            search_data[key] = value
+            query = query.filter(getattr(Card, key).like('%' + value + '%'))
+
     cards = query.order_by('id desc').paginate(page, Card.PER_PAGE, False)
     return render_template("card/list.html",
                            cards=cards,
                            status_title=Card.STATUS_TITLE,
                            troika_state_title=Card.TROIKA_STATE_TITLE,
-                           troika_id=troika_id,
-                           )
+                           search_data=search_data,)
 
 
 @blueprint.route("/<int:card_id>", methods=['GET'])
