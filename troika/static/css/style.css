@@ -162,3 +162,7 @@ footer .footer-nav {
 .filters-block_show {
   display: block;
 }
+
+.statuses-block-hide {
+  display: none;
+}

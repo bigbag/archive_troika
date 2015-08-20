@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import csv
 import logging
+import json
 
 from flask import (Blueprint, abort, current_app, flash, render_template,
-                   request)
+                   request, redirect)
 from flask.ext.login import current_user, login_required
 
 from troika.card.forms import CardForm
@@ -153,3 +154,34 @@ def import_cards():
                 flash(u'Данные успешно загружены', 'success')
 
     return render_template("card/import.html")
+
+@blueprint.route("/set_status", methods=['POST'])
+@login_required
+def set_status():
+    card_list = []
+    try:
+        json_list = json.loads(request.form.get('selected_cards'))
+        for item in json_list:
+            if int(item) in card_list:
+                continue
+            card_list.append(int(item))
+        troika_status = int(request.form.get('troika_status'))
+        status = str(request.form.get('status'))
+    except ValueError:
+        abort(404)
+        
+    cards = Card.query.filter(Card.id.in_(card_list)).all()
+    error = 'no'
+    
+    for card in cards:
+        if troika_status != -1:
+            card.troika_state = troika_status
+        if status != '-1':
+            card.status = status
+        if not card.save():
+            error = 'yes'
+
+    if error == 'no':
+        flash(u'Данные успешно сохранены', "success");
+        
+    return redirect("/card", code=303)
