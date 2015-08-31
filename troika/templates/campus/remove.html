@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Тройка > Кампусы > Удаление ({{ campus.id }} {{ campus.name }}){% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="/">Главная</a></li>
+    <li><a href="/card/">Кампусы</a></li>
+    <li class="active">Удаление ({{ campus.id }} {{ campus.name }})</li>
+  </ol>
+{% endblock %}
+  
+{% block content %}
+  <table class="table table-bordered table-responsive">
+    <h3>Удалить кампус?</h3>
+    <thead>
+      <tr>
+        <th class="col-md-2">Attribute</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>ID</td><td>{{ campus.id }}</td></tr>
+      <tr><td>Название</td><td>{{ campus.name }}</td></tr>
+      <tr><td>Адрес</td><td>{{ campus.address }}</td></tr>
+      <tr><td>Индекс</td><td>{{ campus.zip|default('', true) }}</td></tr>
+    </tbody>
+  </table>
+  <form id="cardForm" class="form-horizontal" method="POST">
+    <p>
+      <button type="submit" class="btn btn-primary" title="Да">
+        Да
+      </button>
+      <a href="{{ url_for('campus.edit', campus_id=campus.id) }}" class="btn btn-primary" title="Нет">
+        Нет
+      </a>
+    </p>
+  </form>
+{% endblock %}

@@ -26,6 +26,16 @@
       <tr><td>Дата добавления</td><td>{{ card.creation_date }}</td></tr>
       <tr><td>Статус в Тройке</td><td>{{ troika_state_title[card.troika_state] }}</td></tr>
       <tr><td>Статус</td><td>{{ status_title[card.status] }}</td></tr>
+      <tr>
+        <td>Кампус</td>
+        <td>
+          {% for key, value in campus_title.iteritems() %}
+            {% if card.campus_id == key%}
+              {{ value }}
+            {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
     </tbody>
   </table>
   <p>

@@ -69,7 +69,8 @@ def show(card_id):
     return render_template("card/show.html",
                            card=card,
                            status_title=Card.STATUS_TITLE,
-                           troika_state_title=Card.TROIKA_STATE_TITLE)
+                           troika_state_title=Card.TROIKA_STATE_TITLE,
+                           campus_title=card.get_campus_title())
 
 
 @blueprint.route("/edit/<int:card_id>", methods=['GET', 'POST'])
@@ -98,7 +99,8 @@ def edit(card_id):
                            card=card,
                            form=form,
                            status_title=card.get_status_title(),
-                           troika_state_title=card.get_troika_state_title())
+                           troika_state_title=card.get_troika_state_title(),
+                           campus_title=card.get_campus_title())
 
 
 def allowed_file(filename):

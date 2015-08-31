@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block page_title %}Тройка > Кампусы{% endblock %}
+
+{% block menu %}
+  <div class="row">
+    <div class="col-md-10">
+      <ol class="breadcrumb">
+        <li><a href="/">Главная</a></li>
+        <li class="active">Кампусы</li>
+      </ol>
+    </div>
+    
+    <div class="col-md-2 text-right">
+      <a href="{{ url_for('campus.new') }}"
+        class="btn btn-primary btn-sm" title="Новый кампус">
+        <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true">
+        </span>
+      </a>
+    </div>
+    
+  </div>
+{% endblock %}
+
+{% block content %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="row">
+      <div class="col-md-12">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <a class="close" title="Close" href="#" data-dismiss="alert">&times;</a>
+         {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  {% endwith %}
+
+
+
+    
+  <table class="table table-bordered table-responsive">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Название</th>
+          <th>Адрес</th>
+          <th>Индекс</th>
+          <th class="col-md-1"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for campus in campuses.items %}
+          <tr>
+            <td>{{ campus.id }}</td>
+            <td>{{ campus.name }}</td>
+            <td>{{ campus.address }}</td>
+            <td>{{ campus.zip }}</td>
+            <td>
+              <a href="{{ url_for('campus.edit', campus_id=campus.id) }}" class="btn btn-primary btn-sm" title="Редактировать">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true">
+                </span>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+  {% block pagination %}
+    <nav>
+      <ul class="pager">
+        {% if campuses.has_prev %}
+        <li>
+          <a href="{{ url_for('campus.list') }}?page={{ campuses.prev_num }}">
+            Previous
+          </a>
+        </li>
+        {% endif %}
+        {% if campuses.has_next %}
+        <li>
+          <a href="{{ url_for('campus.list') }}?page={{ campuses.next_num }}">
+            Next
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endblock %}
+{% endblock %}

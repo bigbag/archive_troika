@@ -21,6 +21,7 @@ class CardForm(Form):
     name_en = TextField(u'Название на англиском', validators=[Length(min=0, max=300)])
     troika_state = IntegerField(u'Статус в Тройке')
     status = StringField(u'Статус')
+    campus_id = IntegerField(u'Кампус')
 
     def __init__(self, *args, **kwargs):
         super(CardForm, self).__init__(*args, **kwargs)
