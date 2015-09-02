@@ -6,6 +6,8 @@ from flask.ext.login import current_user
 from troika.database import Model, ReferenceCol, SurrogatePK, db, relationship
 from troika.helpers import date_helper
 
+from troika.campus.models import Campus
+
 
 class Card(SurrogatePK, Model):
 
@@ -53,6 +55,9 @@ class Card(SurrogatePK, Model):
     order = relationship('Order', backref='cards')
     report_id = ReferenceCol('reports', nullable=True)
     report = relationship('Report', backref='cards')
+    campus_id = ReferenceCol('campus', nullable=True)
+    campus = relationship('Campus', backref='cards')
+    
 
     def __init__(self, hard_id=None, troika_id=None, **kwargs):
         self.old_card = None
@@ -75,6 +80,7 @@ class Card(SurrogatePK, Model):
             'status': self.status,
             'order_id': self.order_id,
             'report_id': self.report_id,
+            'campus_id': self.campus_id,
         }
 
     def to_json(self):
@@ -128,6 +134,9 @@ class Card(SurrogatePK, Model):
     def save(self):
         from troika.history import tasks as history_tasks
         self.update_date = date_helper.get_current_date()
+        
+        if self.campus_id == 0:
+            self.campus_id = None
 
         result = super(Card, self).save()
 
@@ -142,6 +151,16 @@ class Card(SurrogatePK, Model):
             user_id, result.id, result.old_card, result.to_json())
 
         return result
+        
+    def get_campus_title(self):
+        campuses = Campus.query.all()
+        
+        list = {}
+        
+        for campus in campuses:
+            list[campus.id] = u'%s %s (%s)' % (campus.id, campus.name, campus.address)
 
+        return list
+        
     def __repr__(self):
         return '<Card ({hard_id!r})>'.format(hard_id=self.hard_id)

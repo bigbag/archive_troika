@@ -1,0 +1,36 @@
+<form id="campusForm" class="form-horizontal" method="POST">
+  {{ form.hidden_tag() }}
+
+  <div class="form-group">
+    <label for="inputName" class="col-sm-2 control-label">Название</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputName" 
+        name="name" value="{{ campus.name|default('', true) }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputAddress" class="col-sm-2 control-label">Адрес</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputAddress" 
+        name="address" value="{{ campus.address|default('', true) }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="inputZip" class="col-sm-2 control-label">Индекс</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="inputZip" 
+        name="zip" value="{{ campus.zip|default('', true) }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">Сохранить</button>
+      {% if campus and campus.id %}
+      <a href="{{ url_for('campus.remove', campus_id=campus.id) }}" class="btn btn-primary">Удалить кампус</a>
+      {% endif %}
+    </div>
+  </div>
+</form>

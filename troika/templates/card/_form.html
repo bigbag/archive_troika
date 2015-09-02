@@ -56,6 +56,18 @@
   </div>    
 
   <div class="form-group">
+    <label for="inputCampus" class="col-sm-2 control-label">Кампус</label>
+    <div class="col-sm-4">
+      <select class="form-control" name="campus_id">
+        <option {% if not card.campus_id %} selected="selected" {% endif %} value="0"></option>
+        {% for key, value in campus_title.iteritems() %}
+          <option {% if card.campus_id == key%} selected="selected" {% endif %} value="{{ key }}">{{ value }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>   
+  
+  <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-primary">Сохранить</button>
     </div>

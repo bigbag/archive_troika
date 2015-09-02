@@ -7,6 +7,7 @@ from troika.history.models import CardsHistory
 from troika.order.models import Order
 from troika.report.models import Report
 from troika.user.models import User
+from troika.campus.models import Campus
 
 try:
     from troika.settings_local import Config

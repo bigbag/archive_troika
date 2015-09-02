@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import csv
 import logging
+import json
 
 from flask import (Blueprint, abort, current_app, flash, render_template,
-                   request)
+                   request, redirect)
 from flask.ext.login import current_user, login_required
 
 from troika.card.forms import CardForm
@@ -68,7 +69,8 @@ def show(card_id):
     return render_template("card/show.html",
                            card=card,
                            status_title=Card.STATUS_TITLE,
-                           troika_state_title=Card.TROIKA_STATE_TITLE)
+                           troika_state_title=Card.TROIKA_STATE_TITLE,
+                           campus_title=card.get_campus_title())
 
 
 @blueprint.route("/edit/<int:card_id>", methods=['GET', 'POST'])
@@ -97,7 +99,8 @@ def edit(card_id):
                            card=card,
                            form=form,
                            status_title=card.get_status_title(),
-                           troika_state_title=card.get_troika_state_title())
+                           troika_state_title=card.get_troika_state_title(),
+                           campus_title=card.get_campus_title())
 
 
 def allowed_file(filename):
@@ -153,3 +156,34 @@ def import_cards():
                 flash(u'Данные успешно загружены', 'success')
 
     return render_template("card/import.html")
+
+@blueprint.route("/set_status", methods=['POST'])
+@login_required
+def set_status():
+    card_list = []
+    try:
+        json_list = json.loads(request.form.get('selected_cards'))
+        for item in json_list:
+            if int(item) in card_list:
+                continue
+            card_list.append(int(item))
+        troika_status = int(request.form.get('troika_status'))
+        status = str(request.form.get('status'))
+    except ValueError:
+        abort(404)
+        
+    cards = Card.query.filter(Card.id.in_(card_list)).all()
+    error = 'no'
+    
+    for card in cards:
+        if troika_status != -1:
+            card.troika_state = troika_status
+        if status != '-1':
+            card.status = status
+        if not card.save():
+            error = 'yes'
+
+    if error == 'no':
+        flash(u'Данные успешно сохранены', "success");
+        
+    return redirect("/card", code=303)

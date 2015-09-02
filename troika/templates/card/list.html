@@ -16,6 +16,11 @@
         <span class="glyphicon glyphicon glyphicon-search" aria-hidden="true">
         </span>
       </a>
+      <a href="javascript:;"
+        class="btn btn-primary btn-sm" id="show-statuses" title="Редактировать статус">
+        <span class="glyphicon glyphicon-edit" aria-hidden="true">
+        </span>
+      </a>
       <a href="{{ url_for('card.import_cards') }}"
         class="btn btn-primary btn-sm" title="Импорт">
         <span class="glyphicon glyphicon glyphicon-import" aria-hidden="true">
@@ -26,6 +31,21 @@
 {% endblock %}
 
 {% block content %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="row">
+      <div class="col-md-12">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          <a class="close" title="Close" href="#" data-dismiss="alert">&times;</a>
+         {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  {% endwith %}
+
   <div class="row filters-block {% if not search_data %}filters-block_hide{% endif %}">
     <div class="col-md-10">
       <form class="form-horizontal" role="form" method="POST">
@@ -60,10 +80,46 @@
       </form>
     </div>
   </div>
-
+  
+  <div class="row statuses-block statuses-block-hide">
+    <div class="col-md-10">
+      <form class="form-horizontal" role="form" method="POST" action="/card/set_status">
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="set_troika_status">Статус в Тройке:</label>
+          <div class="col-sm-5">
+            <select class="form-control" name="troika_status" id="set_troika_status">
+            <option value="-1" selected="selected">Не менять</option>
+            {% for key, value in troika_state_title.iteritems() %}
+              <option value="{{ key }}">{{ value }}</option>
+            {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="set_status">Статус:</label>
+          <div class="col-sm-5">
+            <select class="form-control" name="status" id="set_status">
+            <option value="-1" selected="selected">Не менять</option>
+            {% for key, value in status_title.iteritems() %}
+              <option value="{{ key }}">{{ value }}</option>
+            {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <input type="hidden" value="{}" name="selected_cards" id="selected_cards">
+            <button id="save_statuses" type="submit" class="btn btn-default">Сохранить</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>    
+    
   <table class="table table-bordered table-responsive">
       <thead>
         <tr>
+          <th></th>
           <th>Hard ID</th>
           <th>Тройка ID</th>
           <th>Статус в Тройке</th>
@@ -74,6 +130,7 @@
       <tbody>
         {% for card in cards.items %}
           <tr>
+            <td class="text-center"><input card_id="{{ card.id }}" class="card-checkbox" type="checkbox"></td>
             <td>
               <a href="{{ url_for('card.show', card_id=card.id) }}">
                 {{ card.hard_id }}
@@ -97,7 +154,7 @@
         {% endfor %}
       </tbody>
     </table>
-
+    
   {% block pagination %}
     <nav>
       <ul class="pager">
