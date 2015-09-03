@@ -2,6 +2,7 @@
 import csv
 import logging
 import json
+from grab import Grab
 
 from flask import (Blueprint, abort, current_app, flash, render_template,
                    request, redirect)
@@ -66,11 +67,28 @@ def show(card_id):
     if not card:
         abort(404)
 
+    spot_code = u'Не удалось связаться с API Mobispot'
+    g = Grab()
+    url = '%s/%s/%s' % (current_app.config.get('API_MOBISPOT'),
+                        card.SPOT_URL, 
+                        card.hard_id)
+    g.setup(userpwd=current_app.config.get('AUTH_SIMPLE'))
+    g.go(url)
+
+    if g.response.code == 404:
+        spot_code = u'N/A'
+
+    if g.response.code == 200:
+        response = json.loads(g.response.body)
+        if 'code' in response:
+            spot_code = response['code']
+
     return render_template("card/show.html",
                            card=card,
                            status_title=Card.STATUS_TITLE,
                            troika_state_title=Card.TROIKA_STATE_TITLE,
-                           campus_title=card.get_campus_title())
+                           campus_title=card.get_campus_title(),
+                           spot_code=spot_code)
 
 
 @blueprint.route("/edit/<int:card_id>", methods=['GET', 'POST'])
@@ -91,7 +109,8 @@ def edit(card_id):
         else:
             logger.debug('CARD EDIT')
             logger.debug('Request data: %(data)s' % {'data': request.form})
-            logger.debug('Form error: %(error)s' % {'error': format_error(form)})
+            logger.debug('Form error: %(error)s' %
+                         {'error': format_error(form)})
 
             flash_errors(form)
 
@@ -106,7 +125,8 @@ def edit(card_id):
 def allowed_file(filename):
 
     return '.' in filename and \
-           filename.rsplit('.', 1)[1] in current_app.config.get('IMPORT_FILE_EXTENSIONS')
+           filename.rsplit('.', 1)[1] in current_app.config.get(
+               'IMPORT_FILE_EXTENSIONS')
 
 
 def parsing_csv(file):
@@ -157,6 +177,7 @@ def import_cards():
 
     return render_template("card/import.html")
 
+
 @blueprint.route("/set_status", methods=['POST'])
 @login_required
 def set_status():
@@ -171,10 +192,10 @@ def set_status():
         status = str(request.form.get('status'))
     except ValueError:
         abort(404)
-        
+
     cards = Card.query.filter(Card.id.in_(card_list)).all()
     error = 'no'
-    
+
     for card in cards:
         if troika_status != -1:
             card.troika_state = troika_status
@@ -184,6 +205,6 @@ def set_status():
             error = 'yes'
 
     if error == 'no':
-        flash(u'Данные успешно сохранены', "success");
-        
+        flash(u'Данные успешно сохранены', "success")
+
     return redirect("/card", code=303)

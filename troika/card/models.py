@@ -42,6 +42,8 @@ class Card(SurrogatePK, Model):
                           STATE_REISSUED: u'Перевыпущена'}
 
     TROIKA_STATE_LOCKED = (STATE_LOST, STATE_BROKEN, STATE_NOT_NEED, STATE_REISSUED)
+    
+    SPOT_URL = "spot/hard_id"
 
     hard_id = db.Column(db.String(128), unique=True, nullable=False)
     troika_id = db.Column(db.String(128), unique=True, nullable=False)

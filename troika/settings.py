@@ -56,6 +56,8 @@ class Config(object):
     # API
     API_USERS = {'card_api': {}, 'order_api': {}}
     API_USER_EMAIL = ""
+    API_MOBISPOT = "https://127.0.0.1:7001"
+    AUTH_SIMPLE = "" #"user:pass"
 
     # DEBUG
     DEBUG = False
