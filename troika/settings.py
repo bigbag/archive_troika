@@ -95,7 +95,8 @@ class Config(object):
     CELERY_BROKER_URL = ''
     CELERY_RESULT_BACKEND = ''
     CELERY_IMPORTS = ('troika.history.tasks',
-                      'troika.report.tasks')
+                      'troika.report.tasks',
+                      'troika.order.tasks')
     CELERYBEAT_SCHEDULE = {
         'empty-recovery-limit-day': {
             'task': 'troika.report.tasks.send_stop_list',
